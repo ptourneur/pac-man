@@ -16,8 +16,8 @@ import java.util.Observer;
 
 public class Main extends Application {
 
-    public final int SIZE_X =10;
-    public final int SIZE_Y = 10;
+    public final int SIZE_X =20;
+    public final int SIZE_Y = 20;
 
     @Override
     public void start(Stage primaryStage) {
@@ -27,9 +27,6 @@ public class Main extends Application {
         // Pacman.svg.png
         Image imPM = new Image("Pacman.png"); // préparation des images
         Image imVide = new Image("Vide.png");
-
-
-
         //img.setScaleY(0.01);
         //img.setScaleX(0.01);
 
@@ -50,13 +47,11 @@ public class Main extends Application {
             public void update(Observable o, Object arg) {
                 for (int i = 0; i < SIZE_X; i++) { // rafraichissement graphique
                     for (int j = 0; j < SIZE_Y; j++) {
-
                         if (spm.getX() == i && spm.getY() == j) { // spm est à la position i, j => le dessiner
                             tab[i][j].setImage(imPM);
                         } else {
                             tab[i][j].setImage(imVide);
                         }
-
                     }
                 }
             }
