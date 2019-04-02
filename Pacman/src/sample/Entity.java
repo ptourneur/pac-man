@@ -13,6 +13,7 @@ public class Entity implements Runnable{
 
     private int x;
     private int y;
+    private Direction direction;
 
     public Entity(){
         this.x=4;
@@ -38,6 +39,10 @@ public class Entity implements Runnable{
         this.grille=g;
     }
 
+    public Direction getDirection() {
+        return direction;
+    }
+
     @Override
     public void run() {
         while(true){
@@ -49,7 +54,7 @@ public class Entity implements Runnable{
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Grille.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                Direction d = Direction.getRandomDirection();
+                this.direction = Direction.getRandomDirection();
             }
         }
     }

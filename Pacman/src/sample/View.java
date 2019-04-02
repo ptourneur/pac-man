@@ -14,6 +14,7 @@ public class View implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         Grille g=((Grille) o);
+        System.out.println(g.getPlayer().getX() + " " + g.getPlayer().getY());
         for(int i=0;i<g.getX();i++){
             for(int j=0;j<g.getY();j++){
                 if(g.getPlayer().getX()==i && g.getPlayer().getY()==j){

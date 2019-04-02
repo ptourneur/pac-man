@@ -103,7 +103,7 @@ public class Grille extends Observable implements Runnable{
             this.setChanged();
             this.notifyObservers();
             try {
-
+                move(this.player.getDirection(),this.player);
                 Thread.currentThread().sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Grille.class.getName()).log(Level.SEVERE, null, ex);
