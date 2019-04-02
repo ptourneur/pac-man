@@ -21,15 +21,13 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
-
         SimplePacMan spm = new SimplePacMan(SIZE_X, SIZE_Y); // initialisation du modèle
-
         GridPane grid = new GridPane(); // création de la grille
 
         // Pacman.svg.png
         Image imPM = new Image("Pacman.png"); // préparation des images
         Image imVide = new Image("Vide.png");
+
 
 
         //img.setScaleY(0.01);
@@ -42,7 +40,6 @@ public class Main extends Application {
                 ImageView img = new ImageView();
 
                 tab[i][j] = img;
-
                 grid.add(img, i, j);
             }
 
@@ -56,9 +53,7 @@ public class Main extends Application {
 
                         if (spm.getX() == i && spm.getY() == j) { // spm est à la position i, j => le dessiner
                             tab[i][j].setImage(imPM);
-
                         } else {
-
                             tab[i][j].setImage(imVide);
                         }
 
