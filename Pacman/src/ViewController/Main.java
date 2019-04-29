@@ -29,8 +29,14 @@ public class Main extends Application {
         GridPane grid = new GridPane(); // création de la grille
 
         // Pacman.svg.png
-        Image imPM = new Image("Pacman.png"); // préparation des images
-        Image imVide = new Image("Vide.png");
+        Image imPM = new Image("ressources/pacmanDown.gif"); // préparation des images
+        Image imPMnorth = new Image("ressources/pacmanUp.gif"); // préparation des images
+        Image imPMsouth = new Image("ressources/pacmanDown.gif"); // préparation des images
+        Image imPMeast = new Image("ressources/pacmanRight.gif"); // préparation des images
+        Image imPMwest = new Image("ressources/pacmanLeft.gif"); // préparation des images
+        Image[] pacmanImages={imPMnorth,imPMeast,imPMsouth,imPMwest};
+        Image imVide = new Image("ressources/ground.png");
+
         //img.setScaleY(0.01);
         //img.setScaleX(0.01);
 
@@ -52,7 +58,7 @@ public class Main extends Application {
                 for (int i = 0; i < SIZE_X; i++) { // rafraichissement graphique
                     for (int j = 0; j < SIZE_Y; j++) {
                         if (spm.getX() == i && spm.getY() == j) { // spm est à la position i, j => le dessiner
-                            tab[i][j].setImage(imPM);
+                            tab[i][j].setImage(pacmanImages[ (spm.getDirection()).ordinal()]);
                         } else {
                             tab[i][j].setImage(imVide);
                         }
@@ -68,13 +74,10 @@ public class Main extends Application {
         StackPane root = new StackPane();
         root.getChildren().add(grid);
 
-        Scene scene = new Scene(root, 300, 250);
+        Scene scene = new Scene(root, 800, 800);
 
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if(key.getCode()==KeyCode.ENTER) {
-                System.out.println("You pressed enter");
-            }
             boolean keyRecognized = true;
             KeyCode code = key.getCode();
             Direction direction=Direction.SOUTH;
