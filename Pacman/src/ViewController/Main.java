@@ -30,7 +30,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         //spm = new SimplePacMan(SIZE_X, SIZE_Y); // initialisation du modèle;
         GridPane grid = new GridPane(); // création de la grille
-        
+
         Image imgPMRight = new Image("ressources/pacmanRight.gif");
         Image imgPMLeft = new Image("ressources/pacmanLeft.gif");
         Image imgPMUp = new Image("ressources/pacmanUp.gif");
@@ -42,7 +42,7 @@ public class Main extends Application {
         Image imgWhiteDot = new Image("ressources/whitedot.png");
         Image imgWall = new Image("ressources/wall.png");
 
-        File file = new File("C:\\Users\\Epulapp\\Documents\\IdeaProjects\\pac-man\\Pacman\\src\\niveaux\\level1.txt");
+        File file = new File("niveaux/level1.txt");
         Scanner scanner = null;
         try {
             scanner = new Scanner(file);
