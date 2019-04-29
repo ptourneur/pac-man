@@ -23,6 +23,8 @@ public class Main extends Application {
 
     public int SIZE_X;
     public int SIZE_Y;
+    public int rowCount;
+    public int columnCount;
 
     private SimplePacMan spm;
 
@@ -35,13 +37,15 @@ public class Main extends Application {
         Image imgPMLeft = new Image("ressources/pacmanLeft.gif");
         Image imgPMUp = new Image("ressources/pacmanUp.gif");
         Image imgPMDown = new Image("ressources/pacmanDown.gif");
+
+        Image[] pacmanImages ={imgPMUp,imgPMRight,imgPMDown,imgPMDown};
         Image imgGhost1 = new Image("ressources/ghost1.gif");
         Image imgGhost2 = new Image("ressources/ghost2.gif");
         Image imgGhost3 = new Image("ressources/ghost3.gif");
         Image imgSmallDot = new Image("ressources/smalldot.png");
         Image imgWhiteDot = new Image("ressources/whitedot.png");
         Image imgWall = new Image("ressources/wall.png");
-
+        Image imVide = new Image("ressources/ground.png");
         File file = new File("C:\\Users\\Epulapp\\Documents\\Projet Informatique Encadré\\pac-man\\Pacman\\src\\niveaux\\level1.txt");
         Scanner scanner = null;
         try {
@@ -49,7 +53,8 @@ public class Main extends Application {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        int rowCount = 0, columnCount = 0;
+         rowCount = 0;
+         columnCount = 0;
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             Scanner lineScanner = new Scanner(line);
@@ -116,26 +121,27 @@ public class Main extends Application {
         }
 
 
-
-
-
+        System.out.println(tab.length);
         Observer o =  new Observer() { // l'observer observe l'obervable (update est exécuté dès notifyObservers() est appelé côté modèle )
             @Override
             public void update(Observable o, Object arg) {
-                /*for (int i = 0; i < SIZE_X; i++) { // rafraichissement graphique
-                    for (int j = 0; j < SIZE_Y; j++) {
+                for (int i = 0; i < rowCount; i++) { // rafraichissement graphique
+                    for (int j = 0; j < columnCount; j++) {
                         if (spm.getX() == i && spm.getY() == j) { // spm est à la position i, j => le dessiner
+                            System.out.println(spm.getX()+" "+spm.getY());
                             tab[i][j].setImage(pacmanImages[ (spm.getDirection()).ordinal()]);
                         } else {
-                            tab[i][j].setImage(imVide);
+                            //tab[i][j].setImage(imVide);
                         }
                     }
-                }*/
+                }
             }
         };
 
 
 
+        spm.addObserver(o);
+        spm.start(); // on démarre spm
 
         StackPane root = new StackPane();
         root.getChildren().add(grid);

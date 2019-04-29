@@ -36,7 +36,6 @@ public class SimplePacMan extends Entity {
     public void run() {
         while(true) { // spm descent dans la grille à chaque pas de temps
 
-
             if(direction==Direction.NORTH){
                 y--;
             }else if(direction==Direction.EAST){
