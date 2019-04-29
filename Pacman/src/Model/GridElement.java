@@ -4,9 +4,10 @@ public interface GridElement {
 
     int getX();
 
-     void setX(int x);
+    void setX(int x);
 
-     int getY();
+    int getY();
 
-     void setY(int y);
+    void setY(int y);
+
 }
