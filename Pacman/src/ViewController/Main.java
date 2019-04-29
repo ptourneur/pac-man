@@ -21,25 +21,28 @@ import java.util.Scanner;
 
 public class Main extends Application {
 
-    public final int SIZE_X = 20;
-    public final int SIZE_Y = 20;
+    public int SIZE_X;
+    public int SIZE_Y;
 
     private SimplePacMan spm;
 
     @Override
     public void start(Stage primaryStage) {
-        spm = new SimplePacMan(SIZE_X, SIZE_Y); // initialisation du modèle;
+        //spm = new SimplePacMan(SIZE_X, SIZE_Y); // initialisation du modèle;
         GridPane grid = new GridPane(); // création de la grille
 
-        Image imgPMRight = new Image("../ressources/pacmanRight.gif");
-        Image imgPMLeft = new Image("../ressources/pacmanLeft.gif");
-        Image imgPMUp = new Image("../ressources/pacmanUp.gif");
-        Image imgPMDown = new Image("../ressources/pacmanDown.gif");
-        Image imgSmallDot = new Image("../ressources/smallDot.gif");
-        Image imgWhiteDot = new Image("../ressources/whiteDot.gif");
-        Image imgWall = new Image("../ressources/wall.png");
+        Image imgPMRight = new Image("ressources/pacmanRight.gif");
+        Image imgPMLeft = new Image("ressources/pacmanLeft.gif");
+        Image imgPMUp = new Image("ressources/pacmanUp.gif");
+        Image imgPMDown = new Image("ressources/pacmanDown.gif");
+        Image imgGhost1 = new Image("ressources/ghost1.gif");
+        Image imgGhost2 = new Image("ressources/ghost2.gif");
+        Image imgGhost3 = new Image("ressources/ghost3.gif");
+        Image imgSmallDot = new Image("ressources/smalldot.png");
+        Image imgWhiteDot = new Image("ressources/whitedot.png");
+        Image imgWall = new Image("ressources/wall.png");
 
-        File file = new File("../niveaux/level1.txt");
+        File file = new File("C:\\Users\\Epulapp\\Documents\\IdeaProjects\\pac-man\\Pacman\\src\\niveaux\\level1.txt");
         Scanner scanner = null;
         try {
             scanner = new Scanner(file);
@@ -57,13 +60,21 @@ public class Main extends Application {
             rowCount++;
         }
         columnCount = columnCount/rowCount;
+        ImageView[][] tab = new ImageView[rowCount][columnCount]; // tableau permettant de récupérer les cases graphiques lors du rafraichissement
+        for (int i = 0; i < rowCount; i++) {
+            for (int j = 0; j < columnCount; j++) {
+                ImageView img = new ImageView();
+                tab[i][j] = img;
+                grid.add(img, i, j);
+            }
+        }
+
         Scanner scanner2 = null;
         try {
             scanner2 = new Scanner(file);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        grid = new CellValue[rowCount][columnCount];
         int row = 0;
         int pacmanRow = 0;
         int pacmanColumn = 0;
@@ -77,77 +88,41 @@ public class Main extends Application {
             Scanner lineScanner = new Scanner(line);
             while (lineScanner.hasNext()){
                 String value = lineScanner.next();
-                CellValue thisValue;
                 switch (value) {
                     case "W":
+                        tab[row][column].setImage(imgWall);
                         break;
                     case "S":
+                        tab[row][column].setImage(imgSmallDot);
                         break;
                     case "B":
+                        tab[row][column].setImage(imgWhiteDot);
                         break;
                     case "1":
+                        tab[row][column].setImage(imgPMLeft);
                         break;
                     case "2":
+                        tab[row][column].setImage(imgWall);
                         break;
                     case "P":
+                        tab[row][column].setImage(imgPMRight);
                         break;
                     default:
-
-
-
+                        tab[row][column].setImage(imgPMRight);
                 }
-                if (value.equals("W")){
-                    thisValue = CellValue.WALL;
-                }
-                else if (value.equals("S")){
-                    thisValue = CellValue.SMALLDOT;
-                    dotCount++;
-                }
-                else if (value.equals("B")){
-                    thisValue = CellValue.BIGDOT;
-                    dotCount++;
-                }
-                else if (value.equals("1")){
-                    thisValue = CellValue.GHOST1HOME;
-                    ghost1Row = row;
-                    ghost1Column = column;
-                }
-                else if (value.equals("2")){
-                    thisValue = CellValue.GHOST2HOME;
-                    ghost2Row = row;
-                    ghost2Column = column;
-                }
-                else if (value.equals("P")){
-                    thisValue = CellValue.PACMANHOME;
-                    pacmanRow = row;
-                    pacmanColumn = column;
-                }
-                else //(value.equals("E"))
-                {
-                    thisValue = CellValue.EMPTY;
-                }
-                grid[row][column] = thisValue;
                 column++;
             }
             row++;
         }
 
-        ImageView[][] tab = new ImageView[SIZE_X][SIZE_Y]; // tableau permettant de récupérer les cases graphiques lors du rafraichissement
 
-        for (int i = 0; i < SIZE_X; i++) {
-            for (int j = 0; j < SIZE_Y; j++) {
-                ImageView img = new ImageView();
 
-                tab[i][j] = img;
-                grid.add(img, i, j);
-            }
 
-        }
 
         Observer o =  new Observer() { // l'observer observe l'obervable (update est exécuté dès notifyObservers() est appelé côté modèle )
             @Override
             public void update(Observable o, Object arg) {
-                for (int i = 0; i < SIZE_X; i++) { // rafraichissement graphique
+                /*for (int i = 0; i < SIZE_X; i++) { // rafraichissement graphique
                     for (int j = 0; j < SIZE_Y; j++) {
                         if (spm.getX() == i && spm.getY() == j) { // spm est à la position i, j => le dessiner
                             tab[i][j].setImage(imPM);
@@ -155,13 +130,12 @@ public class Main extends Application {
                             tab[i][j].setImage(imVide);
                         }
                     }
-                }
+                }*/
             }
         };
 
 
-        spm.addObserver(o);
-        spm.start(); // on démarre spm
+
 
         StackPane root = new StackPane();
         root.getChildren().add(grid);
