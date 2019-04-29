@@ -15,9 +15,11 @@ import java.util.logging.Logger;
  *
  * @author fred
  */
-public class SimplePacMan extends Observable implements Runnable {
+public class SimplePacMan extends Observable implements Runnable,GridElement {
 
-    int x, y, sizeX, sizeY;
+    int  x,y,sizeX, sizeY;
+
+    Direction direction=Direction.SOUTH;
     
     Random r = new Random();
     
@@ -33,11 +35,25 @@ public class SimplePacMan extends Observable implements Runnable {
     public int getX() {
         return x;
     }
-    
+
+    @Override
+    public void setX(int x) {
+        this.x=x;
+    }
+
     public int getY() {
         return y;
     }
-    
+
+    @Override
+    public void setY(int y) {
+        this.y=y;
+    }
+
+    public void setDirection(Direction d) {
+        this.direction=d;
+    }
+
     public void start() {
         new Thread(this).start();
     }
@@ -46,29 +62,28 @@ public class SimplePacMan extends Observable implements Runnable {
         x = 0;
         y = 0;
     }
-    
+
+
     @Override
     public void run() {
         while(true) { // spm descent dasn la grille à chaque pas de temps
-            
-           int deltaX = r.nextInt(2);
-           
-           if (x + deltaX > 0 && x + deltaX < sizeX) {
-               x += deltaX;
-           }
-           
-           int deltaY = r.nextInt(2);
-           if (y + deltaY > 0 && y + deltaY < sizeX) {
-               y += deltaY;
-           } 
-           
-           //System.out.println(x + " - " + y);
-           
+
+
+            if(direction==Direction.NORTH){
+                y--;
+            }else if(direction==Direction.EAST){
+                x++;
+            }else if(direction==Direction.SOUTH){
+                y++;
+            }else if(direction==Direction.WEST){
+                x--;
+            }
+
            setChanged(); 
            notifyObservers(); // notification de l'observer
            
             try {
-                Thread.sleep(300); // pause
+                Thread.sleep(150); // pause
             } catch (InterruptedException ex) {
                 Logger.getLogger(SimplePacMan.class.getName()).log(Level.SEVERE, null, ex);
             }

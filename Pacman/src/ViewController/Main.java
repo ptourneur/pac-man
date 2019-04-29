@@ -1,11 +1,13 @@
 package ViewController;
 
+import Model.Direction;
 import Model.SimplePacMan;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -19,9 +21,11 @@ public class Main extends Application {
     public final int SIZE_X =20;
     public final int SIZE_Y = 20;
 
+    private SimplePacMan spm;
+
     @Override
     public void start(Stage primaryStage) {
-        SimplePacMan spm = new SimplePacMan(SIZE_X, SIZE_Y); // initialisation du modèle
+        spm = new SimplePacMan(SIZE_X, SIZE_Y); // initialisation du modèle;
         GridPane grid = new GridPane(); // création de la grille
 
         // Pacman.svg.png
@@ -58,9 +62,6 @@ public class Main extends Application {
         };
 
 
-
-
-
         spm.addObserver(o);
         spm.start(); // on démarre spm
 
@@ -68,6 +69,27 @@ public class Main extends Application {
         root.getChildren().add(grid);
 
         Scene scene = new Scene(root, 300, 250);
+
+
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
+            if(key.getCode()==KeyCode.ENTER) {
+                System.out.println("You pressed enter");
+            }
+            boolean keyRecognized = true;
+            KeyCode code = key.getCode();
+            Direction direction=Direction.SOUTH;
+            if (code == KeyCode.LEFT) {
+                direction=(Direction.WEST);
+            } else if (code == KeyCode.RIGHT) {
+                direction=(Direction.EAST);
+            } else if (code == KeyCode.UP) {
+                direction=(Direction.NORTH);
+            } else if (code == KeyCode.DOWN) {
+                direction=(Direction.SOUTH);
+            }
+            System.out.println(direction);
+            spm.setDirection(direction);
+        });
 
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
