@@ -30,7 +30,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         //spm = new SimplePacMan(SIZE_X, SIZE_Y); // initialisation du modèle;
         GridPane grid = new GridPane(); // création de la grille
-
+        
         Image imgPMRight = new Image("ressources/pacmanRight.gif");
         Image imgPMLeft = new Image("ressources/pacmanLeft.gif");
         Image imgPMUp = new Image("ressources/pacmanUp.gif");
@@ -125,7 +125,7 @@ public class Main extends Application {
                 /*for (int i = 0; i < SIZE_X; i++) { // rafraichissement graphique
                     for (int j = 0; j < SIZE_Y; j++) {
                         if (spm.getX() == i && spm.getY() == j) { // spm est à la position i, j => le dessiner
-                            tab[i][j].setImage(imPM);
+                            tab[i][j].setImage(pacmanImages[ (spm.getDirection()).ordinal()]);
                         } else {
                             tab[i][j].setImage(imVide);
                         }
@@ -140,13 +140,10 @@ public class Main extends Application {
         StackPane root = new StackPane();
         root.getChildren().add(grid);
 
-        Scene scene = new Scene(root, 300, 250);
+        Scene scene = new Scene(root, 800, 800);
 
 
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-            if(key.getCode()==KeyCode.ENTER) {
-                System.out.println("You pressed enter");
-            }
             boolean keyRecognized = true;
             KeyCode code = key.getCode();
             Direction direction=Direction.SOUTH;
