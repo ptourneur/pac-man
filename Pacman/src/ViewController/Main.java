@@ -1,7 +1,6 @@
 package ViewController;
 
-import Model.Direction;
-import Model.SimplePacMan;
+import Model.*;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -23,33 +22,40 @@ public class Main extends Application {
 
     public int SIZE_X;
     public int SIZE_Y;
+    public int rowCount;
+    public int columnCount;
 
-    private SimplePacMan spm;
+    private PacMan spm;
+    private GridElement[][] grille;
 
     @Override
     public void start(Stage primaryStage) {
-        //spm = new SimplePacMan(SIZE_X, SIZE_Y); // initialisation du modèle;
+        spm = new PacMan(); // initialisation du modèle;
         GridPane grid = new GridPane(); // création de la grille
 
         Image imgPMRight = new Image("ressources/pacmanRight.gif");
         Image imgPMLeft = new Image("ressources/pacmanLeft.gif");
         Image imgPMUp = new Image("ressources/pacmanUp.gif");
         Image imgPMDown = new Image("ressources/pacmanDown.gif");
+
+        Image[] pacmanImages ={imgPMUp,imgPMRight,imgPMDown,imgPMDown};
         Image imgGhost1 = new Image("ressources/ghost1.gif");
         Image imgGhost2 = new Image("ressources/ghost2.gif");
         Image imgGhost3 = new Image("ressources/ghost3.gif");
         Image imgSmallDot = new Image("ressources/smalldot.png");
         Image imgWhiteDot = new Image("ressources/whitedot.png");
         Image imgWall = new Image("ressources/wall.png");
-
+        Image imgVide = new Image("ressources/ground.png");
         File file = new File("niveaux/level1.txt");
+
         Scanner scanner = null;
         try {
             scanner = new Scanner(file);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        int rowCount = 0, columnCount = 0;
+         rowCount = 0;
+         columnCount = 0;
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             Scanner lineScanner = new Scanner(line);
@@ -61,6 +67,7 @@ public class Main extends Application {
         }
         columnCount = columnCount/rowCount;
         ImageView[][] tab = new ImageView[rowCount][columnCount]; // tableau permettant de récupérer les cases graphiques lors du rafraichissement
+        grille = new GridElement[rowCount][columnCount];
         for (int i = 0; i < rowCount; i++) {
             for (int j = 0; j < columnCount; j++) {
                 ImageView img = new ImageView();
@@ -76,12 +83,6 @@ public class Main extends Application {
             e.printStackTrace();
         }
         int row = 0;
-        int pacmanRow = 0;
-        int pacmanColumn = 0;
-        int ghost1Row = 0;
-        int ghost1Column = 0;
-        int ghost2Row = 0;
-        int ghost2Column = 0;
         while(scanner2.hasNextLine()){
             int column = 0;
             String line= scanner2.nextLine();
@@ -90,25 +91,32 @@ public class Main extends Application {
                 String value = lineScanner.next();
                 switch (value) {
                     case "W":
+                        grille[row][column] = new Wall();
                         tab[row][column].setImage(imgWall);
                         break;
                     case "S":
+                        grille[row][column] = new Ground(new PacGum());
                         tab[row][column].setImage(imgSmallDot);
                         break;
                     case "B":
+                        grille[row][column] = new Ground(new SuperPacGum());
                         tab[row][column].setImage(imgWhiteDot);
                         break;
                     case "1":
-                        tab[row][column].setImage(imgPMLeft);
+                        grille[row][column] = new Ghost();
+                        tab[row][column].setImage(imgGhost2);
                         break;
                     case "2":
-                        tab[row][column].setImage(imgWall);
+                        grille[row][column] = new Ghost();
+                        tab[row][column].setImage(imgGhost2);
                         break;
                     case "P":
+                        grille[row][column] = new PacMan();
                         tab[row][column].setImage(imgPMRight);
                         break;
                     default:
-                        tab[row][column].setImage(imgPMRight);
+                        grille[row][column] = new Wall();
+                        tab[row][column].setImage(imgWall);
                 }
                 column++;
             }
@@ -116,26 +124,32 @@ public class Main extends Application {
         }
 
 
-
-
-
+        System.out.println(tab.length);
         Observer o =  new Observer() { // l'observer observe l'obervable (update est exécuté dès notifyObservers() est appelé côté modèle )
             @Override
             public void update(Observable o, Object arg) {
-                /*for (int i = 0; i < SIZE_X; i++) { // rafraichissement graphique
-                    for (int j = 0; j < SIZE_Y; j++) {
+                for (int i = 0; i < rowCount; i++) { // rafraichissement graphique
+                    for (int j = 0; j < columnCount; j++) {
                         if (spm.getX() == i && spm.getY() == j) { // spm est à la position i, j => le dessiner
+                            System.out.println(spm.getX()+" "+spm.getY());
                             tab[i][j].setImage(pacmanImages[ (spm.getDirection()).ordinal()]);
                         } else {
-                            tab[i][j].setImage(imVide);
+                            if (grille[i][j] instanceof Wall) {
+                                tab[i][j].setImage(imgWall);
+                            } else {
+                                tab[i][j].setImage(imgSmallDot);
+                            }
+                            //tab[i][j].setImage(imVide);
                         }
                     }
-                }*/
+                }
             }
         };
 
 
 
+        spm.addObserver(o);
+        spm.start(); // on démarre spm
 
         StackPane root = new StackPane();
         root.getChildren().add(grid);

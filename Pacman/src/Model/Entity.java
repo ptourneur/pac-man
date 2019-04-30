@@ -17,17 +17,14 @@ import java.util.logging.Logger;
  */
 public abstract class Entity extends Observable implements Runnable,GridElement {
 
-    int  x,y,sizeX, sizeY;
+    int  x,y;
 
     Direction direction;
 
 
 
-    public Entity(int _sizeX, int _sizeY) {
+    public Entity() {
         x = 0; y = 0;
-
-        sizeX = _sizeX;
-        sizeY = _sizeY;
         direction=Direction.SOUTH;
     }
 
