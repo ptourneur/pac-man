@@ -74,10 +74,10 @@ public class Main extends Application {
             rowCount++;
         }
         columnCount = columnCount/rowCount;
-        ImageView[][] tab = new ImageView[rowCount][columnCount]; // tableau permettant de récupérer les cases graphiques lors du rafraichissement
-        grille = new GridElement[rowCount][columnCount];
-        for (int i = 0; i < rowCount; i++) {
-            for (int j = 0; j < columnCount; j++) {
+        ImageView[][] tab = new ImageView[columnCount][rowCount]; // tableau permettant de récupérer les cases graphiques lors du rafraichissement
+        grille = new GridElement[columnCount][rowCount];
+        for (int i = 0; i < columnCount; i++) {
+            for (int j = 0; j < rowCount; j++) {
                 ImageView img = new ImageView();
                 tab[i][j] = img;
                 grid.add(img, i, j);
@@ -99,59 +99,62 @@ public class Main extends Application {
                 String value = lineScanner.next();
                 switch (value) {
                     case "W":
-                        grille[row][column] = new Wall();
-                        tab[row][column].setImage(imgWall);
+                        grille[column][row] = new Wall();
+                        tab[column][row].setImage(imgWall);
                         break;
                     case "S":
-                        grille[row][column] = new Ground(new PacGum());
-                        tab[row][column].setImage(imgSmallDot);
+                        grille[column][row] = new Ground(new PacGum());
+                        tab[column][row].setImage(imgSmallDot);
                         break;
                     case "B":
-                        grille[row][column] = new Ground(new SuperPacGum());
-                        tab[row][column].setImage(imgWhiteDot);
+                        grille[column][row] = new Ground(new SuperPacGum());
+                        tab[column][row].setImage(imgWhiteDot);
                         break;
                     case "E":
-                        grille[row][column] = new Ground();
-                        tab[row][column].setImage(imgGround);
+                        grille[column][row] = new Ground();
+                        tab[column][row].setImage(imgGround);
                         break;
                     case "1":
-                        grille[row][column] = new Ghost(1);
-                        tab[row][column].setImage(imgGhost1Right);
+                        grille[column][row] = new Ghost(1);
+                        tab[column][row].setImage(imgGhost1Right);
                         break;
                     case "2":
-                        grille[row][column] = new Ghost(2);
-                        tab[row][column].setImage(imgGhost2Right);
+                        grille[column][row] = new Ghost(2);
+                        tab[column][row].setImage(imgGhost2Right);
                         break;
                     case "P":
-                        grille[row][column] = new PacMan();
-                        tab[row][column].setImage(imgPMRight);
+                        grille[column][row] = new PacMan();
+                        tab[column][row].setImage(imgPMRight);
                         break;
                     default:
-                        grille[row][column] = new Wall();
-                        tab[row][column].setImage(imgWall);
+                        grille[column][row] = new Wall();
+                        tab[column][row].setImage(imgWall);
                 }
                 column++;
             }
             row++;
         }
 
-
-        System.out.println(tab.length);
         Observer o =  new Observer() { // l'observer observe l'obervable (update est exécuté dès notifyObservers() est appelé côté modèle )
             @Override
             public void update(Observable o, Object arg) {
-                for (int i = 0; i < rowCount; i++) { // rafraichissement graphique
-                    for (int j = 0; j < columnCount; j++) {
+                for (int i = 0; i < columnCount; i++) { // rafraichissement graphique
+                    for (int j = 0; j < rowCount; j++) {
                         if (spm.getX() == i && spm.getY() == j) { // spm est à la position i, j => le dessiner
                             System.out.println(spm.getX()+" "+spm.getY());
                             tab[i][j].setImage(pacmanImages[ (spm.getDirection()).ordinal()]);
                         } else {
                             if (grille[i][j] instanceof Wall) {
                                 tab[i][j].setImage(imgWall);
-                            } else {
-                                tab[i][j].setImage(imgSmallDot);
+                            } else if(grille[i][j] instanceof Ground){
+                                if (((Ground) grille[i][j]).getItem() instanceof  PacGum) {
+                                    tab[i][j].setImage(imgSmallDot);
+                                } else if(((Ground) grille[i][j]).getItem() instanceof  SuperPacGum) {
+                                    tab[i][j].setImage(imgWhiteDot);
+                                } else {
+                                    tab[i][j].setImage(imgGround);
+                                }
                             }
-                            //tab[i][j].setImage(imVide);
                         }
                     }
                 }
@@ -186,7 +189,7 @@ public class Main extends Application {
             spm.setDirection(direction);
         });
 
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Pac Man");
         primaryStage.setScene(scene);
         primaryStage.show();
 
