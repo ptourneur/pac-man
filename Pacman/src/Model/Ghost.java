@@ -14,10 +14,18 @@ import java.util.logging.Logger;
  * @author fred
  */
 public class Ghost extends Entity {
+    private int numGhost;
 
+    public Ghost(int numGhost) {
+        this.numGhost = numGhost;
+    }
 
-    public Ghost() {
+    public int getNumGhost() {
+        return numGhost;
+    }
 
+    public void setNumGhost(int numGhost) {
+        this.numGhost = numGhost;
     }
 
     public void start() {

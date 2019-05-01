@@ -3,6 +3,9 @@ package Model;
 public class Ground extends Layout {
     private Item item;
 
+    public Ground() {
+    }
+
     public Ground(Item item) {
         this.item = item;
     }

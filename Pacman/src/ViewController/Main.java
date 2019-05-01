@@ -37,15 +37,23 @@ public class Main extends Application {
         Image imgPMLeft = new Image("ressources/pacmanLeft.gif");
         Image imgPMUp = new Image("ressources/pacmanUp.gif");
         Image imgPMDown = new Image("ressources/pacmanDown.gif");
+        Image[] pacmanImages ={imgPMUp,imgPMRight,imgPMDown,imgPMLeft};
 
-        Image[] pacmanImages ={imgPMUp,imgPMRight,imgPMDown,imgPMDown};
-        Image imgGhost1 = new Image("ressources/ghost1.gif");
-        Image imgGhost2 = new Image("ressources/ghost2.gif");
-        Image imgGhost3 = new Image("ressources/ghost3.gif");
+        Image imgGhost1Right = new Image("ressources/ghost1Right.jpg");
+        Image imgGhost1Left = new Image("ressources/ghost1Left.jpg");
+        Image[] ghost1Images ={imgGhost1Right, imgGhost1Left};
+        Image imgGhost2Right = new Image("ressources/ghost2Right.jpg");
+        Image imgGhost2Left = new Image("ressources/ghost2Left.jpg");
+        Image[] ghost2Images ={imgGhost2Right, imgGhost2Left};
+        Image imgGhost3Right = new Image("ressources/ghost3Right.jpg");
+        Image imgGhost3Left = new Image("ressources/ghost3Left.jpg");
+        Image[] ghost3Images ={imgGhost3Right, imgGhost3Left};
+
         Image imgSmallDot = new Image("ressources/smalldot.png");
         Image imgWhiteDot = new Image("ressources/whitedot.png");
         Image imgWall = new Image("ressources/wall.png");
-        Image imgVide = new Image("ressources/ground.png");
+        Image imgGround = new Image("ressources/ground.png");
+
         File file = new File("niveaux/level1.txt");
 
         Scanner scanner = null;
@@ -102,13 +110,17 @@ public class Main extends Application {
                         grille[row][column] = new Ground(new SuperPacGum());
                         tab[row][column].setImage(imgWhiteDot);
                         break;
+                    case "E":
+                        grille[row][column] = new Ground();
+                        tab[row][column].setImage(imgGround);
+                        break;
                     case "1":
-                        grille[row][column] = new Ghost();
-                        tab[row][column].setImage(imgGhost2);
+                        grille[row][column] = new Ghost(1);
+                        tab[row][column].setImage(imgGhost1Right);
                         break;
                     case "2":
-                        grille[row][column] = new Ghost();
-                        tab[row][column].setImage(imgGhost2);
+                        grille[row][column] = new Ghost(2);
+                        tab[row][column].setImage(imgGhost2Right);
                         break;
                     case "P":
                         grille[row][column] = new PacMan();
