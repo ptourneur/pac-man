@@ -20,17 +20,14 @@ import java.util.Scanner;
 
 public class Main extends Application {
 
-    public int SIZE_X;
-    public int SIZE_Y;
-    public int rowCount;
-    public int columnCount;
+    private int rowCount;
+    private int columnCount;
 
-    private PacMan spm;
+    private PacMan pacMan;
     private GridElement[][] grille;
 
     @Override
     public void start(Stage primaryStage) {
-        spm = new PacMan(); // initialisation du modèle;
         GridPane grid = new GridPane(); // création de la grille
 
         Image imgPMRight = new Image("ressources/pacmanRight.gif");
@@ -115,16 +112,17 @@ public class Main extends Application {
                         tab[column][row].setImage(imgGround);
                         break;
                     case "1":
-                        grille[column][row] = new Ghost(1);
+                        grille[column][row] = new Ghost(row, column, 1);
                         tab[column][row].setImage(imgGhost1Right);
                         break;
                     case "2":
-                        grille[column][row] = new Ghost(2);
+                        grille[column][row] = new Ghost(row, column, 2);
                         tab[column][row].setImage(imgGhost2Right);
                         break;
                     case "P":
-                        grille[column][row] = new PacMan();
-                        tab[column][row].setImage(imgPMRight);
+                        pacMan = new PacMan(column, row);
+                        grille[column][row] = pacMan;
+                        tab[column][row].setImage(imgGround);
                         break;
                     default:
                         grille[column][row] = new Wall();
@@ -140,9 +138,9 @@ public class Main extends Application {
             public void update(Observable o, Object arg) {
                 for (int i = 0; i < columnCount; i++) { // rafraichissement graphique
                     for (int j = 0; j < rowCount; j++) {
-                        if (spm.getX() == i && spm.getY() == j) { // spm est à la position i, j => le dessiner
-                            System.out.println(spm.getX()+" "+spm.getY());
-                            tab[i][j].setImage(pacmanImages[ (spm.getDirection()).ordinal()]);
+                        if (pacMan.getX() == i && pacMan.getY() == j) { // pacMan est à la position i, j => le dessiner
+                            System.out.println(pacMan.getX()+" "+ pacMan.getY());
+                            tab[i][j].setImage(pacmanImages[ (pacMan.getDirection()).ordinal()]);
                         } else {
                             if (grille[i][j] instanceof Wall) {
                                 tab[i][j].setImage(imgWall);
@@ -163,8 +161,8 @@ public class Main extends Application {
 
 
 
-        spm.addObserver(o);
-        spm.start(); // on démarre spm
+        pacMan.addObserver(o);
+        pacMan.start(); // on démarre pacMan
 
         StackPane root = new StackPane();
         root.getChildren().add(grid);
@@ -186,7 +184,7 @@ public class Main extends Application {
                 direction=(Direction.SOUTH);
             }
             System.out.println(direction);
-            spm.setDirection(direction);
+            pacMan.setDirection(direction);
         });
 
         primaryStage.setTitle("Pac Man");
@@ -199,7 +197,7 @@ public class Main extends Application {
             @Override
             public void handle(javafx.scene.input.KeyEvent event) {
                 if (event.isShiftDown()) {
-                    spm.initXY(); // si on clique sur shift, on remet spm en haut à gauche
+                    pacMan.initXY(); // si on clique sur shift, on remet pacMan en haut à gauche
                 }
             }
         });
