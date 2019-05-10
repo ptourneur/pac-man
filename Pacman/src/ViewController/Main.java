@@ -1,6 +1,8 @@
 package ViewController;
 
 import Model.*;
+import Model.Direction;
+import Model.Ghost;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -10,6 +12,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -25,9 +29,17 @@ public class Main extends Application {
 
     private PacMan pacMan;
     private GridElement[][] grille;
-
+    private Ghost ghostRed;
+    private Ghost ghostBlue;
     @Override
     public void start(Stage primaryStage) {
+        String musicFile = "src/ressources/pacman_beginning.wav";     // For example
+        Media sound = new Media(new File(musicFile).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.play();
+
+        ghostRed = new Ghost(8, 9); // initialisation du modèle;
+        ghostBlue = new Ghost(10, 9); // initialisation du modèle;
         GridPane grid = new GridPane(); // création de la grille
 
         Image imgPMRight = new Image("ressources/pacmanRight.gif");
@@ -45,6 +57,7 @@ public class Main extends Application {
         Image imgGhost3Right = new Image("ressources/ghost3Right.jpg");
         Image imgGhost3Left = new Image("ressources/ghost3Left.jpg");
         Image[] ghost3Images ={imgGhost3Right, imgGhost3Left};
+
 
         Image imgSmallDot = new Image("ressources/smalldot.png");
         Image imgWhiteDot = new Image("ressources/whitedot.png");
@@ -141,7 +154,21 @@ public class Main extends Application {
                         if (pacMan.getX() == i && pacMan.getY() == j) { // pacMan est à la position i, j => le dessiner
                             System.out.println(pacMan.getX()+" "+ pacMan.getY());
                             tab[i][j].setImage(pacmanImages[ (pacMan.getDirection()).ordinal()]);
-                        } else {
+                            System.out.println(grille[i][j] instanceof SuperPacGum);
+                            if( grille[i][j] instanceof Ground  && ((Ground) grille[i][j]).getItem()!=null &&((Ground) grille[i][j]).getItem().getClass().getCanonicalName() =="Model.PacGum")   {
+                                grille[i][j]=new Ground();
+                            }
+
+                        }
+                        else if(ghostRed.getX() == i && ghostRed.getY() == j){
+                            tab[i][j].setImage(ghost1Images[0]);
+
+                        }
+                        else if(ghostBlue.getX() == i && ghostBlue.getY() == j){
+                            tab[i][j].setImage(ghost2Images[0]);
+
+                        }
+                        else {
                             if (grille[i][j] instanceof Wall) {
                                 tab[i][j].setImage(imgWall);
                             } else if(grille[i][j] instanceof Ground){
@@ -163,6 +190,10 @@ public class Main extends Application {
 
         pacMan.addObserver(o);
         pacMan.start(); // on démarre pacMan
+
+
+        ghostRed.start(); // on démarre spm
+        ghostBlue.start(); // on démarre spm
 
         StackPane root = new StackPane();
         root.getChildren().add(grid);
