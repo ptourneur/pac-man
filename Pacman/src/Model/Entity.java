@@ -13,15 +13,17 @@ import java.util.logging.Logger;
 
 public abstract class Entity extends Observable implements Runnable,GridElement {
 
-    int  x,y;
+    protected int  x,y;
+    protected Grid grille;
 
     Direction direction;
 
 
 
-    public Entity(int x, int y) {
+    public Entity(int x, int y, Grid grille) {
         this.x = x;
         this.y = y;
+        this.grille = grille;
         direction=Direction.EAST;
     }
 
@@ -55,23 +57,28 @@ public abstract class Entity extends Observable implements Runnable,GridElement 
         new Thread(this).start();
     }
 
-    public void initXY() {
-        x = 0;
-        y = 0;
-    }
+
 
     @Override
     public void run() {
-        while(true) { // pacman descent dans la grille à chaque pas de temps
+        while(true) {
 
             if(direction==Direction.NORTH){
-                y--;
+                if (grille.isValideMove(x, y-1)) {
+                    y--;
+                }
             }else if(direction==Direction.EAST){
-                x++;
+                if (grille.isValideMove(x+1, y)) {
+                    x++;
+                }
             }else if(direction==Direction.SOUTH){
-                y++;
+                if (grille.isValideMove(x, y+1)) {
+                    y++;
+                }
             }else if(direction==Direction.WEST){
-                x--;
+                if (grille.isValideMove(x-1, y)) {
+                    x--;
+                }
             }
 
             setChanged();

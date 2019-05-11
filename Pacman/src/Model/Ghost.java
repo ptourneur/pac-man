@@ -12,8 +12,8 @@ import java.util.logging.Logger;
 public class Ghost extends Entity {
     private int numGhost;
 
-    public Ghost(int x, int y, int numGhost) {
-        super(x,y);
+    public Ghost(int x, int y, int numGhost, Grid grille) {
+        super(x,y, grille);
         this.numGhost = numGhost;
     }
 
@@ -21,13 +21,6 @@ public class Ghost extends Entity {
     public int getNumGhost() {
         return numGhost;
     }
-
-    public Ghost(int x, int y) {
-        super(0, 0);
-        this.setX(x);
-        this.setY(y);
-    }
-
 
     public void setNumGhost(int numGhost) {
         this.numGhost = numGhost;
@@ -38,7 +31,6 @@ public class Ghost extends Entity {
     }
 
 
-
     @Override
     public void run() {
         while(true) { // spm descent dans la grille à chaque pas de temps
@@ -46,13 +38,21 @@ public class Ghost extends Entity {
             direction=Direction.getRandomDirection();
 
             if(direction==Direction.NORTH){
-                y--;
+                if (grille.isValideMove(x, y-1)) {
+                    y--;
+                }
             }else if(direction==Direction.EAST){
-                x++;
+                if (grille.isValideMove(x+1, y)) {
+                    x++;
+                }
             }else if(direction==Direction.SOUTH){
-                y++;
+                if (grille.isValideMove(x, y+1)) {
+                    y++;
+                }
             }else if(direction==Direction.WEST){
-                x--;
+                if (grille.isValideMove(x-1, y)) {
+                    x--;
+                }
             }
 
             setChanged();

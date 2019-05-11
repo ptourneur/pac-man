@@ -12,8 +12,8 @@ import java.util.logging.Logger;
 public class PacMan extends Entity {
 
 
-    public PacMan(int x, int y) {
-        super(x,y);
+    public PacMan(int x, int y, Grid grille) {
+        super(x,y,grille);
     }
 
     public void start() {
