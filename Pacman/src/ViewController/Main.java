@@ -41,16 +41,23 @@ public class Main extends Application {
         Image imgPMDown = new Image("ressources/pacmanDown.gif");
         Image[] pacmanImages ={imgPMUp,imgPMRight,imgPMDown,imgPMLeft};
 
-        Image imgGhost1Right = new Image("ressources/ghost1Right.jpg");
-        Image imgGhost1Left = new Image("ressources/ghost1Left.jpg");
-        Image[] ghost1Images ={imgGhost1Right, imgGhost1Left};
-        Image imgGhost2Right = new Image("ressources/ghost2Right.jpg");
-        Image imgGhost2Left = new Image("ressources/ghost2Left.jpg");
-        Image[] ghost2Images ={imgGhost2Right, imgGhost2Left};
-        Image imgGhost3Right = new Image("ressources/ghost3Right.jpg");
-        Image imgGhost3Left = new Image("ressources/ghost3Left.jpg");
-        Image[] ghost3Images ={imgGhost3Right, imgGhost3Left};
+        Image imgRedGhostRight = new Image("ressources/redGhostRight.gif");
+        Image imgRedGhostLeft = new Image("ressources/redGhostLeft.gif");
+        Image imgRedGhostUp = new Image("ressources/redGhostUp.gif");
+        Image imgRedGhostDown = new Image("ressources/redGhostDown.gif");
+        Image[] redGhostImages ={imgRedGhostUp, imgRedGhostRight, imgRedGhostDown, imgRedGhostLeft};
 
+        Image imgCyanGhostRight = new Image("ressources/cyanGhostRight.gif");
+        Image imgCyanGhostLeft = new Image("ressources/cyanGhostLeft.gif");
+        Image imgCyanGhostUp = new Image("ressources/cyanGhostUp.gif");
+        Image imgCyanGhostDown = new Image("ressources/cyanGhostDown.gif");
+        Image[] cyanGhostImages ={imgCyanGhostUp, imgCyanGhostRight, imgCyanGhostDown, imgCyanGhostLeft};
+
+        Image imgOrangeGhostRight = new Image("ressources/orangeGhostRight.gif");
+        Image imgOrangeGhostLeft = new Image("ressources/orangeGhostLeft.gif");
+        Image imgOrangeGhostUp = new Image("ressources/orangeGhostUp.gif");
+        Image imgOrangeGhostDown = new Image("ressources/orangeGhostDown.gif");
+        Image[] orangeGhostImages ={imgOrangeGhostUp, imgOrangeGhostRight, imgOrangeGhostDown, imgOrangeGhostLeft};
 
         Image imgSmallDot = new Image("ressources/smalldot.png");
         Image imgWhiteDot = new Image("ressources/whitedot.png");
@@ -63,7 +70,6 @@ public class Main extends Application {
         pacMan = grille.getPacMan();
         ghostRed = grille.getGhostRed();
         ghostBlue = grille.getGhostBlue();
-
 
         ImageView[][] tab = new ImageView[columnCount][rowCount]; // tableau permettant de récupérer les cases graphiques lors du rafraichissement
 
@@ -90,10 +96,10 @@ public class Main extends Application {
                             }
                         }
                         else if(ghostRed.getX() == i && ghostRed.getY() == j){
-                            tab[i][j].setImage(ghost1Images[0]);
+                            tab[i][j].setImage(redGhostImages[0]);
                         }
                         else if(ghostBlue.getX() == i && ghostBlue.getY() == j){
-                            tab[i][j].setImage(ghost2Images[0]);
+                            tab[i][j].setImage(cyanGhostImages[0]);
                         }
                         else {
                             if (grille.getElement(i,j) instanceof Wall) {
