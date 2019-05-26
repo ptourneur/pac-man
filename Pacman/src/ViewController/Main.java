@@ -1,10 +1,7 @@
 package ViewController;
 
 import Model.*;
-import Model.Direction;
-import Model.Ghost;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,18 +14,16 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Scanner;
 
 public class Main extends Application {
 
     private int rowCount;
     private int columnCount;
 
-    private PacMan pacMan;
     private Grid grille;
+    private PacMan pacMan;
     private Ghost ghostRed;
     private Ghost ghostBlue;
     @Override
@@ -62,28 +57,16 @@ public class Main extends Application {
         Image imgWall = new Image("ressources/wall.png");
         Image imgGround = new Image("ressources/ground.png");
 
-        File file = new File("niveaux/level1.txt");
+        grille = new Grid();
+        columnCount = grille.getColumnCount();
+        rowCount = grille.getRowCount();
+        pacMan = grille.getPacMan();
+        ghostRed = grille.getGhostRed();
+        ghostBlue = grille.getGhostBlue();
 
-        Scanner scanner = null;
-        try {
-            scanner = new Scanner(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-         rowCount = 0;
-         columnCount = 0;
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            Scanner lineScanner = new Scanner(line);
-            while (lineScanner.hasNext()) {
-                lineScanner.next();
-                columnCount++;
-            }
-            rowCount++;
-        }
-        columnCount = columnCount/rowCount;
+
         ImageView[][] tab = new ImageView[columnCount][rowCount]; // tableau permettant de récupérer les cases graphiques lors du rafraichissement
-        grille = new Grid(columnCount, rowCount);
+
         for (int i = 0; i < columnCount; i++) {
             for (int j = 0; j < rowCount; j++) {
                 ImageView img = new ImageView();
@@ -92,59 +75,8 @@ public class Main extends Application {
             }
         }
 
-        Scanner scanner2 = null;
-        try {
-            scanner2 = new Scanner(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        int row = 0;
-        while(scanner2.hasNextLine()){
-            int column = 0;
-            String line= scanner2.nextLine();
-            Scanner lineScanner = new Scanner(line);
-            while (lineScanner.hasNext()){
-                String value = lineScanner.next();
-                switch (value) {
-                    case "W":
-                        grille.setElement(column, row, new Wall());
-                        tab[column][row].setImage(imgWall);
-                        break;
-                    case "S":
-                        grille.setElement(column, row, new Ground(new PacGum()));
-                        tab[column][row].setImage(imgSmallDot);
-                        break;
-                    case "B":
-                        grille.setElement(column, row, new Ground(new SuperPacGum()));
-                        tab[column][row].setImage(imgWhiteDot);
-                        break;
-                    case "E":
-                        grille.setElement(column, row, new Ground());
-                        tab[column][row].setImage(imgGround);
-                        break;
-                    case "1":
-                        ghostRed = new Ghost(row, column, 1, grille);
-                        grille.setElement(column, row, ghostRed);
-                        tab[column][row].setImage(imgGhost1Right);
-                        break;
-                    case "2":
-                        ghostBlue = new Ghost(row, column, 2, grille);
-                        grille.setElement(column, row, ghostBlue);
-                        tab[column][row].setImage(imgGhost2Right);
-                        break;
-                    case "P":
-                        pacMan = new PacMan(column, row, grille);
-                        grille.setElement(column, row, pacMan);
-                        tab[column][row].setImage(imgGround);
-                        break;
-                    default:
-                        grille.setElement(column, row, new Wall());
-                        tab[column][row].setImage(imgWall);
-                }
-                column++;
-            }
-            row++;
-        }
+
+
 
         Observer o =  new Observer() { // l'observer observe l'obervable (update est exécuté dès notifyObservers() est appelé côté modèle )
             @Override
@@ -152,20 +84,16 @@ public class Main extends Application {
                 for (int i = 0; i < columnCount; i++) { // rafraichissement graphique
                     for (int j = 0; j < rowCount; j++) {
                         if (pacMan.getX() == i && pacMan.getY() == j) { // pacMan est à la position i, j => le dessiner
-                            System.out.println(pacMan.getX()+" "+ pacMan.getY());
                             tab[i][j].setImage(pacmanImages[ (pacMan.getDirection()).ordinal()]);
                             if( grille.getElement(i,j) instanceof Ground  && ((Ground) grille.getElement(i,j)).getItem()!=null &&((Ground) grille.getElement(i,j)).getItem().getClass().getCanonicalName() =="Model.PacGum")   {
                                 grille.setElement(i, j, new Ground());
                             }
-
                         }
                         else if(ghostRed.getX() == i && ghostRed.getY() == j){
                             tab[i][j].setImage(ghost1Images[0]);
-
                         }
                         else if(ghostBlue.getX() == i && ghostBlue.getY() == j){
                             tab[i][j].setImage(ghost2Images[0]);
-
                         }
                         else {
                             if (grille.getElement(i,j) instanceof Wall) {
@@ -186,20 +114,15 @@ public class Main extends Application {
         };
 
 
-
         pacMan.addObserver(o);
         pacMan.start(); // on démarre pacMan
-
-
-        ghostRed.start(); // on démarre spm
-        ghostBlue.start(); // on démarre spm
+        ghostRed.start();
+        ghostBlue.start();
 
         StackPane root = new StackPane();
         root.getChildren().add(grid);
 
         Scene scene = new Scene(root, 800, 800);
-
-
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             boolean keyRecognized = true;
             KeyCode code = key.getCode();
@@ -213,7 +136,6 @@ public class Main extends Application {
             } else if (code == KeyCode.DOWN) {
                 direction=(Direction.SOUTH);
             }
-            System.out.println(direction);
             pacMan.setDirection(direction);
         });
 
@@ -222,8 +144,6 @@ public class Main extends Application {
         primaryStage.show();
 
         grid.requestFocus();
-
-
 
     }
 
