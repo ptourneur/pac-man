@@ -91,9 +91,6 @@ public class Main extends Application {
                     for (int j = 0; j < rowCount; j++) {
                         if (pacMan.getX() == i && pacMan.getY() == j) { // pacMan est à la position i, j => le dessiner
                             tab[i][j].setImage(pacmanImages[ (pacMan.getDirection()).ordinal()]);
-                            if( grille.getElement(i,j) instanceof Ground  && ((Ground) grille.getElement(i,j)).getItem()!=null &&((Ground) grille.getElement(i,j)).getItem().getClass().getCanonicalName() =="Model.PacGum")   {
-                                grille.setElement(i, j, new Ground());
-                            }
                         }
                         else if(ghostRed.getX() == i && ghostRed.getY() == j){
                             tab[i][j].setImage(redGhostImages[0]);

@@ -56,46 +56,4 @@ public abstract class Entity extends Observable implements Runnable,GridElement 
     public void start() {
         new Thread(this).start();
     }
-
-
-
-    @Override
-    public void run() {
-        while(true) {
-
-            if(direction==Direction.NORTH){
-                if (grille.isValideMove(x, y-1)) {
-                    y--;
-                }
-            }else if(direction==Direction.EAST){
-                if (grille.isValideMove(x+1, y)) {
-                    x++;
-                }
-            }else if(direction==Direction.SOUTH){
-                if (grille.isValideMove(x, y+1)) {
-                    y++;
-                }
-            }else if(direction==Direction.WEST){
-                if (grille.isValideMove(x-1, y)) {
-                    x--;
-                }
-            }
-
-            setChanged();
-            notifyObservers(); // notification de l'observer
-
-            try {
-                Thread.sleep(250); // pause
-            } catch (InterruptedException ex) {
-                Logger.getLogger(PacMan.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
-
-    }
-
-
-
-
-
 }

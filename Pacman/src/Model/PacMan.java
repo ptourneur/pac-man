@@ -20,4 +20,38 @@ public class PacMan extends Entity {
         new Thread(this).start();
     }
 
+    public void run() {
+        while(true) {
+            if(direction==Direction.NORTH){
+                if (grille.isValideMove(x, y-1)) {
+                    grille.setElement(x, y, new Ground());
+                    y--;
+                }
+            }else if(direction==Direction.EAST){
+                if (grille.isValideMove(x+1, y)) {
+                    grille.setElement(x, y, new Ground());
+                    x++;
+                }
+            }else if(direction==Direction.SOUTH){
+                if (grille.isValideMove(x, y+1)) {
+                    grille.setElement(x, y, new Ground());
+                    y++;
+                }
+            }else if(direction==Direction.WEST){
+                if (grille.isValideMove(x-1, y)) {
+                    grille.setElement(x, y, new Ground());
+                    x--;
+                }
+            }
+            setChanged();
+            notifyObservers(); // notification de l'observer
+
+            try {
+                Thread.sleep(250); // pause
+            } catch (InterruptedException ex) {
+                Logger.getLogger(PacMan.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    }
 }
