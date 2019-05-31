@@ -24,8 +24,21 @@ public class Main extends Application {
 
     private Grid grille;
     private PacMan pacMan;
+    private static final int X_PACMAN = 9;
+    private static final int Y_PACMAN = 15;
     private Ghost ghostRed;
-    private Ghost ghostBlue;
+    private static final int X_GHOSTRED = 9;
+    private static final int Y_GHOSTRED = 7;
+    private Ghost ghostCyan;
+    private static final int X_GHOSTCYAN = 8;
+    private static final int Y_GHOSTCYAN = 9;
+    private Ghost ghostPink;
+    private static final int X_GHOSTPINK = 9;
+    private static final int Y_GHOSTPINK = 9;
+    private Ghost ghostOrange;
+    private static final int X_GHOSTORANGE = 10;
+    private static final int Y_GHOSTORANGE = 9;
+
     @Override
     public void start(Stage primaryStage) {
         String musicFile = "src/ressources/pacman_beginning.wav";     // For example
@@ -67,9 +80,9 @@ public class Main extends Application {
         grille = new Grid();
         columnCount = grille.getColumnCount();
         rowCount = grille.getRowCount();
-        pacMan = grille.getPacMan();
-        ghostRed = grille.getGhostRed();
-        ghostBlue = grille.getGhostBlue();
+        pacMan = new PacMan(X_PACMAN, Y_PACMAN, grille);
+        ghostRed = new Ghost(X_GHOSTRED, Y_GHOSTRED, 1, grille);
+        ghostCyan = new Ghost(X_GHOSTCYAN, Y_GHOSTCYAN, 2, grille);
 
         ImageView[][] tab = new ImageView[columnCount][rowCount]; // tableau permettant de récupérer les cases graphiques lors du rafraichissement
 
@@ -95,7 +108,7 @@ public class Main extends Application {
                         else if(ghostRed.getX() == i && ghostRed.getY() == j){
                             tab[i][j].setImage(redGhostImages[0]);
                         }
-                        else if(ghostBlue.getX() == i && ghostBlue.getY() == j){
+                        else if(ghostCyan.getX() == i && ghostCyan.getY() == j){
                             tab[i][j].setImage(cyanGhostImages[0]);
                         }
                         else {
@@ -120,7 +133,7 @@ public class Main extends Application {
         pacMan.addObserver(o);
         pacMan.start(); // on démarre pacMan
         ghostRed.start();
-        ghostBlue.start();
+        ghostCyan.start();
 
         StackPane root = new StackPane();
         root.getChildren().add(grid);

@@ -9,9 +9,6 @@ public class Grid {
     File file;
     private int columnCount;
     private int rowCount;
-    private PacMan pacMan;
-    private Ghost ghostRed;
-    private Ghost ghostBlue;
 
     public Grid() {
         this.file = new File("niveaux/level1.txt");
@@ -38,18 +35,6 @@ public class Grid {
 
     public int getColumnCount() {
         return columnCount;
-    }
-
-    public PacMan getPacMan() {
-        return pacMan;
-    }
-
-    public Ghost getGhostRed() {
-        return ghostRed;
-    }
-
-    public Ghost getGhostBlue() {
-        return ghostBlue;
     }
 
     private void initMapSize() {
@@ -100,18 +85,6 @@ public class Grid {
                         break;
                     case "E":
                         this.setElement(column, row, new Ground());
-                        break;
-                    case "1":
-                        this.ghostRed = new Ghost(row, column, 1, this);
-                        this.setElement(column, row, ghostRed);
-                        break;
-                    case "2":
-                        this.ghostBlue = new Ghost(row, column, 2, this);
-                        this.setElement(column, row, ghostBlue);
-                        break;
-                    case "P":
-                        this.pacMan = new PacMan(column, row, this);
-                        this.setElement(column, row, pacMan);
                         break;
                     default:
                         this.setElement(column, row, new Wall());
