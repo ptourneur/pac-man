@@ -66,6 +66,12 @@ public class Main extends Application {
         Image imgCyanGhostDown = new Image("ressources/cyanGhostDown.gif");
         Image[] cyanGhostImages ={imgCyanGhostUp, imgCyanGhostRight, imgCyanGhostDown, imgCyanGhostLeft};
 
+        Image imgPinkGhostRight = new Image("ressources/pinkGhostRight.gif");
+        Image imgPinkGhostLeft = new Image("ressources/pinkGhostLeft.gif");
+        Image imgPinkGhostUp = new Image("ressources/pinkGhostUp.gif");
+        Image imgPinkGhostDown = new Image("ressources/pinkGhostDown.gif");
+        Image[] pinkGhostImages ={imgPinkGhostUp, imgPinkGhostRight, imgPinkGhostDown, imgPinkGhostLeft};
+
         Image imgOrangeGhostRight = new Image("ressources/orangeGhostRight.gif");
         Image imgOrangeGhostLeft = new Image("ressources/orangeGhostLeft.gif");
         Image imgOrangeGhostUp = new Image("ressources/orangeGhostUp.gif");
@@ -83,6 +89,8 @@ public class Main extends Application {
         pacMan = new PacMan(X_PACMAN, Y_PACMAN, grille);
         ghostRed = new Ghost(X_GHOSTRED, Y_GHOSTRED, 1, grille);
         ghostCyan = new Ghost(X_GHOSTCYAN, Y_GHOSTCYAN, 2, grille);
+        ghostPink = new Ghost(X_GHOSTPINK, Y_GHOSTPINK, 3, grille);
+        ghostOrange = new Ghost(X_GHOSTORANGE, Y_GHOSTORANGE, 4, grille);
 
         ImageView[][] tab = new ImageView[columnCount][rowCount]; // tableau permettant de récupérer les cases graphiques lors du rafraichissement
 
@@ -94,22 +102,25 @@ public class Main extends Application {
             }
         }
 
-
-
-
         Observer o =  new Observer() { // l'observer observe l'obervable (update est exécuté dès notifyObservers() est appelé côté modèle )
             @Override
             public void update(Observable o, Object arg) {
                 for (int i = 0; i < columnCount; i++) { // rafraichissement graphique
                     for (int j = 0; j < rowCount; j++) {
                         if (pacMan.getX() == i && pacMan.getY() == j) { // pacMan est à la position i, j => le dessiner
-                            tab[i][j].setImage(pacmanImages[ (pacMan.getDirection()).ordinal()]);
+                            tab[i][j].setImage(pacmanImages[(pacMan.getDirection()).ordinal()]);
                         }
                         else if(ghostRed.getX() == i && ghostRed.getY() == j){
-                            tab[i][j].setImage(redGhostImages[0]);
+                            tab[i][j].setImage(redGhostImages[(ghostRed.getDirection()).ordinal()]);
                         }
                         else if(ghostCyan.getX() == i && ghostCyan.getY() == j){
-                            tab[i][j].setImage(cyanGhostImages[0]);
+                            tab[i][j].setImage(cyanGhostImages[(ghostCyan.getDirection()).ordinal()]);
+                        }
+                        else if(ghostPink.getX() == i && ghostPink.getY() == j){
+                            tab[i][j].setImage(pinkGhostImages[(ghostPink.getDirection()).ordinal()]);
+                        }
+                        else if(ghostOrange.getX() == i && ghostOrange.getY() == j){
+                            tab[i][j].setImage(orangeGhostImages[(ghostOrange.getDirection()).ordinal()]);
                         }
                         else {
                             if (grille.getElement(i,j) instanceof Wall) {
@@ -134,6 +145,8 @@ public class Main extends Application {
         pacMan.start(); // on démarre pacMan
         ghostRed.start();
         ghostCyan.start();
+        ghostPink.start();
+        ghostOrange.start();
 
         StackPane root = new StackPane();
         root.getChildren().add(grid);
