@@ -54,6 +54,12 @@ public class PacMan extends Entity {
             if (pacmanHasMoved) {
                 if (((Ground)grille.getElement(x, y)).getItem() instanceof SuperPacGum) {
                     ghostList.forEach(ghost -> ghost.setVulnerable());
+                } else {
+                    for (Ghost ghost:ghostList){
+                        if (ghost.getX() == x && ghost.getY() == y) {
+                            this.isDead = true;
+                        }
+                    }
                 }
                 setChanged();
                 notifyObservers(); // notification de l'observer

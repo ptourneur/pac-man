@@ -26,7 +26,11 @@ public class Grid {
     }
 
     public boolean isValideMove(int newCol, int newRow) {
+        if (newCol >= 0 && newCol < columnCount && newRow >= 0 && newRow < rowCount) {
             return !(this.grille[newCol][newRow] instanceof Wall);
+        } else {
+            return false;
+        }
     }
 
     public int getRowCount() {

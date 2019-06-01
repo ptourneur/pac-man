@@ -15,8 +15,8 @@ public abstract class Entity extends Observable implements Runnable,GridElement 
 
     protected int  x,y;
     protected Grid grille;
-
-    Direction direction;
+    protected Direction direction;
+    protected boolean isDead;
 
 
 
@@ -24,14 +24,14 @@ public abstract class Entity extends Observable implements Runnable,GridElement 
         this.x = x;
         this.y = y;
         this.grille = grille;
-        direction=Direction.EAST;
+        this.direction = Direction.EAST;
+        this.isDead = false;
     }
 
     public int getX() {
         return x;
     }
 
-    @Override
     public void setX(int x) {
         this.x=x;
     }
@@ -40,7 +40,6 @@ public abstract class Entity extends Observable implements Runnable,GridElement 
         return y;
     }
 
-    @Override
     public void setY(int y) {
         this.y=y;
     }
@@ -51,6 +50,14 @@ public abstract class Entity extends Observable implements Runnable,GridElement 
 
     public Direction getDirection(){
         return this.direction;
+    }
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public void setDead(boolean dead) {
+        isDead = dead;
     }
 
     public void start() {

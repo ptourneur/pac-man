@@ -70,7 +70,7 @@ public class Ghost extends Entity {
             if (isVulnerable()) {
                 this.isVulnerable -= 250;
             }
-            
+
             setChanged();
             notifyObservers(); // notification de l'observer
 
