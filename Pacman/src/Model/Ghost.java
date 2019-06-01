@@ -11,12 +11,25 @@ import java.util.logging.Logger;
 
 public class Ghost extends Entity {
     private int numGhost;
+    private int isVulnerable; // Nombre de temps restant en ms
 
     public Ghost(int x, int y, int numGhost, Grid grille) {
         super(x,y, grille);
         this.numGhost = numGhost;
+        this.isVulnerable = 0;
     }
 
+    public boolean isVulnerable() {
+        return isVulnerable != 0;
+    }
+
+    public boolean isSoonNotVulnerable() {
+        return isVulnerable < 2000;
+    }
+
+    public void setVulnerable() {
+        isVulnerable = 9000;
+    }
 
     public int getNumGhost() {
         return numGhost;
@@ -54,7 +67,10 @@ public class Ghost extends Entity {
                     x--;
                 }
             }
-
+            if (isVulnerable()) {
+                this.isVulnerable -= 250;
+            }
+            
             setChanged();
             notifyObservers(); // notification de l'observer
 

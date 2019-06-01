@@ -11,9 +11,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -78,6 +81,8 @@ public class Main extends Application {
         Image imgOrangeGhostDown = new Image("ressources/orangeGhostDown.gif");
         Image[] orangeGhostImages ={imgOrangeGhostUp, imgOrangeGhostRight, imgOrangeGhostDown, imgOrangeGhostLeft};
 
+        Image imgBlueGhost = new Image("ressources/blueGhost.gif");
+        Image imgWhiteGhost = new Image("ressources/whiteGhost.gif");
         Image imgSmallDot = new Image("ressources/smalldot.png");
         Image imgWhiteDot = new Image("ressources/whitedot.png");
         Image imgWall = new Image("ressources/wall.png");
@@ -86,11 +91,17 @@ public class Main extends Application {
         grille = new Grid();
         columnCount = grille.getColumnCount();
         rowCount = grille.getRowCount();
-        pacMan = new PacMan(X_PACMAN, Y_PACMAN, grille);
         ghostRed = new Ghost(X_GHOSTRED, Y_GHOSTRED, 1, grille);
         ghostCyan = new Ghost(X_GHOSTCYAN, Y_GHOSTCYAN, 2, grille);
         ghostPink = new Ghost(X_GHOSTPINK, Y_GHOSTPINK, 3, grille);
         ghostOrange = new Ghost(X_GHOSTORANGE, Y_GHOSTORANGE, 4, grille);
+        List<Ghost> ghostList = new ArrayList<>();
+        ghostList.add(ghostRed);
+        ghostList.add(ghostCyan);
+        ghostList.add(ghostPink);
+        ghostList.add(ghostOrange);
+        pacMan = new PacMan(X_PACMAN, Y_PACMAN, grille, ghostList);
+
 
         ImageView[][] tab = new ImageView[columnCount][rowCount]; // tableau permettant de récupérer les cases graphiques lors du rafraichissement
 
@@ -104,6 +115,7 @@ public class Main extends Application {
 
         Observer o =  new Observer() { // l'observer observe l'obervable (update est exécuté dès notifyObservers() est appelé côté modèle )
             @Override
+            @SuppressWarnings("Duplicates")
             public void update(Observable o, Object arg) {
                 for (int i = 0; i < columnCount; i++) { // rafraichissement graphique
                     for (int j = 0; j < rowCount; j++) {
@@ -111,16 +123,48 @@ public class Main extends Application {
                             tab[i][j].setImage(pacmanImages[(pacMan.getDirection()).ordinal()]);
                         }
                         else if(ghostRed.getX() == i && ghostRed.getY() == j){
-                            tab[i][j].setImage(redGhostImages[(ghostRed.getDirection()).ordinal()]);
+                            if (ghostRed.isVulnerable()) {
+                                if (ghostRed.isSoonNotVulnerable()) {
+                                    tab[i][j].setImage(imgWhiteGhost);
+                                } else {
+                                    tab[i][j].setImage(imgBlueGhost);
+                                }
+                            } else {
+                                tab[i][j].setImage(redGhostImages[(ghostRed.getDirection()).ordinal()]);
+                            }
                         }
                         else if(ghostCyan.getX() == i && ghostCyan.getY() == j){
-                            tab[i][j].setImage(cyanGhostImages[(ghostCyan.getDirection()).ordinal()]);
+                            if (ghostCyan.isVulnerable()) {
+                                if (ghostCyan.isSoonNotVulnerable()) {
+                                    tab[i][j].setImage(imgWhiteGhost);
+                                } else {
+                                    tab[i][j].setImage(imgBlueGhost);
+                                }
+                            } else {
+                                tab[i][j].setImage(cyanGhostImages[(ghostCyan.getDirection()).ordinal()]);
+                            }
                         }
                         else if(ghostPink.getX() == i && ghostPink.getY() == j){
-                            tab[i][j].setImage(pinkGhostImages[(ghostPink.getDirection()).ordinal()]);
+                            if (ghostPink.isVulnerable()) {
+                                if (ghostPink.isSoonNotVulnerable()) {
+                                    tab[i][j].setImage(imgWhiteGhost);
+                                } else {
+                                    tab[i][j].setImage(imgBlueGhost);
+                                }
+                            } else {
+                                tab[i][j].setImage(pinkGhostImages[(ghostPink.getDirection()).ordinal()]);
+                            }
                         }
                         else if(ghostOrange.getX() == i && ghostOrange.getY() == j){
-                            tab[i][j].setImage(orangeGhostImages[(ghostOrange.getDirection()).ordinal()]);
+                            if (ghostOrange.isVulnerable()) {
+                                if (ghostPink.isSoonNotVulnerable()) {
+                                    tab[i][j].setImage(imgWhiteGhost);
+                                } else {
+                                    tab[i][j].setImage(imgBlueGhost);
+                                }
+                            } else {
+                                tab[i][j].setImage(orangeGhostImages[(ghostOrange.getDirection()).ordinal()]);
+                            }
                         }
                         else {
                             if (grille.getElement(i,j) instanceof Wall) {
@@ -151,7 +195,7 @@ public class Main extends Application {
         StackPane root = new StackPane();
         root.getChildren().add(grid);
 
-        Scene scene = new Scene(root, 800, 800);
+        Scene scene = new Scene(root, 800, 800, Color.BLACK);
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             boolean keyRecognized = true;
             KeyCode code = key.getCode();
