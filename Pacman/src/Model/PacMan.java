@@ -5,6 +5,8 @@
  */
 package Model;
 
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,8 +14,9 @@ import java.util.logging.Logger;
 public class PacMan extends Entity {
 
 
-    public PacMan(int x, int y, Grid grille) {
-        super(x,y,grille);
+    public PacMan(int x, int y, Grid grille,CyclicBarrier cyclicBarrier) {
+        super(x,y,grille,cyclicBarrier);
+
     }
 
     public void start() {
@@ -48,8 +51,12 @@ public class PacMan extends Entity {
 
             try {
                 Thread.sleep(250); // pause
+
+                this.getCyclicBarrier().await();
             } catch (InterruptedException ex) {
                 Logger.getLogger(PacMan.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (BrokenBarrierException e) {
+                e.printStackTrace();
             }
 
         }

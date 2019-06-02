@@ -2,6 +2,9 @@ package ViewController;
 
 import Model.*;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,9 +16,11 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
+import javafx.scene.control.Button;
 import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.CyclicBarrier;
 
 public class Main extends Application {
 
@@ -39,8 +44,8 @@ public class Main extends Application {
     private static final int X_GHOSTORANGE = 10;
     private static final int Y_GHOSTORANGE = 9;
 
-    @Override
-    public void start(Stage primaryStage) {
+
+    public void startGame(Stage primaryStage){
         String musicFile = "src/ressources/pacman_beginning.wav";     // For example
         Media sound = new Media(new File(musicFile).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
@@ -86,11 +91,14 @@ public class Main extends Application {
         grille = new Grid();
         columnCount = grille.getColumnCount();
         rowCount = grille.getRowCount();
-        pacMan = new PacMan(X_PACMAN, Y_PACMAN, grille);
-        ghostRed = new Ghost(X_GHOSTRED, Y_GHOSTRED, 1, grille);
-        ghostCyan = new Ghost(X_GHOSTCYAN, Y_GHOSTCYAN, 2, grille);
-        ghostPink = new Ghost(X_GHOSTPINK, Y_GHOSTPINK, 3, grille);
-        ghostOrange = new Ghost(X_GHOSTORANGE, Y_GHOSTORANGE, 4, grille);
+
+        CyclicBarrier cyclicBarrier = new CyclicBarrier(5 ,new AggregatorThread());
+        pacMan = new PacMan(X_PACMAN, Y_PACMAN, grille,cyclicBarrier);
+        ghostRed = new Ghost(X_GHOSTRED, Y_GHOSTRED, 1, grille,cyclicBarrier);
+        ghostCyan = new Ghost(X_GHOSTCYAN, Y_GHOSTCYAN, 2, grille,cyclicBarrier);
+        ghostPink = new Ghost(X_GHOSTPINK, Y_GHOSTPINK, 3, grille,cyclicBarrier);
+        ghostOrange = new Ghost(X_GHOSTORANGE, Y_GHOSTORANGE, 4, grille,cyclicBarrier);
+
 
         ImageView[][] tab = new ImageView[columnCount][rowCount]; // tableau permettant de récupérer les cases graphiques lors du rafraichissement
 
@@ -148,10 +156,18 @@ public class Main extends Application {
         ghostPink.start();
         ghostOrange.start();
 
+
+
+        final Image gameSidebar = new Image( "ressources/gameSidebar.png" ); //title screen image
+        final ImageView flashScreen_node = new ImageView();
+        flashScreen_node.setImage(gameSidebar); //set the image of the title screen
+        primaryStage.getIcons().add(gameSidebar); //stage icon
+
         StackPane root = new StackPane();
         root.getChildren().add(grid);
+        root.getChildren().add(flashScreen_node);
 
-        Scene scene = new Scene(root, 800, 800);
+        Scene scene = new Scene(root, 1000, 800);
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             boolean keyRecognized = true;
             KeyCode code = key.getCode();
@@ -168,11 +184,59 @@ public class Main extends Application {
             pacMan.setDirection(direction);
         });
 
+
+
+
         primaryStage.setTitle("Pac Man");
         primaryStage.setScene(scene);
         primaryStage.show();
 
         grid.requestFocus();
+
+    }
+    @Override
+    public void start(Stage primaryStage) {
+
+        final Image titleScreen = new Image( "ressources/backgroundTitle.png" ); //title screen image
+
+        final ImageView flashScreen_node = new ImageView();
+        flashScreen_node.setImage(titleScreen); //set the image of the title screen
+
+        primaryStage.setTitle( "Super PacMan" );
+        primaryStage.getIcons().add(titleScreen); //stage icon
+
+        final double CANVAS_WIDTH = 1000;
+        final double CANVAS_HEIGHT = 800;
+
+        Group root = new Group();
+        root.getChildren().addAll(flashScreen_node); //add the title screen to the root
+
+        Button startGameButton = new Button();
+        Image imageDecline = new Image("ressources/buttonStartgame.png");
+        startGameButton.setGraphic(new ImageView(imageDecline));
+        startGameButton.setLayoutX(400);
+        startGameButton.setLayoutY(670);
+        startGameButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                startGame(primaryStage);
+            }
+        });
+
+        root.getChildren().add(startGameButton);
+
+        startGameButton.getStylesheets().add("ressources/startButtonCss.css");
+
+
+        Scene theScene = new Scene( root, CANVAS_WIDTH, CANVAS_HEIGHT);
+        primaryStage.setScene( theScene );
+        primaryStage.show();
+
+
+        startGame(primaryStage);
+
+
+
 
     }
 

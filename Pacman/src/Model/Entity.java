@@ -7,6 +7,7 @@ package Model;
 
 import java.util.Observable;
 import java.util.Random;
+import java.util.concurrent.CyclicBarrier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,15 +16,23 @@ public abstract class Entity extends Observable implements Runnable,GridElement 
 
     protected int  x,y;
     protected Grid grille;
-
+    private CyclicBarrier cyclicBarrier;
     Direction direction;
 
 
+    public CyclicBarrier getCyclicBarrier() {
+        return cyclicBarrier;
+    }
 
-    public Entity(int x, int y, Grid grille) {
+    public void setCyclicBarrier(CyclicBarrier cyclicBarrier) {
+        this.cyclicBarrier = cyclicBarrier;
+    }
+
+    public Entity(int x, int y, Grid grille, CyclicBarrier cyclicBarrier) {
         this.x = x;
         this.y = y;
         this.grille = grille;
+        this.cyclicBarrier = cyclicBarrier;
         direction=Direction.EAST;
     }
 

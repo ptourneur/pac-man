@@ -5,6 +5,8 @@
  */
 package Model;
 
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,8 +14,8 @@ import java.util.logging.Logger;
 public class Ghost extends Entity {
     private int numGhost;
 
-    public Ghost(int x, int y, int numGhost, Grid grille) {
-        super(x,y, grille);
+    public Ghost(int x, int y, int numGhost, Grid grille, CyclicBarrier cyclicBarrier) {
+        super(x,y, grille,cyclicBarrier);
         this.numGhost = numGhost;
     }
 
@@ -60,8 +62,11 @@ public class Ghost extends Entity {
 
             try {
                 Thread.sleep(250); // pause
+                this.getCyclicBarrier().await();
             } catch (InterruptedException ex) {
                 Logger.getLogger(Ghost.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (BrokenBarrierException e) {
+                e.printStackTrace();
             }
 
         }
