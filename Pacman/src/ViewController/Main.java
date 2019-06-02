@@ -357,7 +357,7 @@ public class Main extends Application {
         primaryStage.show();
 
 
-        startGame(primaryStage);
+        //startGame(primaryStage);
 
 
 
