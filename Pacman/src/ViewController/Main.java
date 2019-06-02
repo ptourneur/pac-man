@@ -5,6 +5,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -61,6 +62,36 @@ public class Main extends Application {
     private Integer timeSeconds = 0;
     private Integer timeMinutes = 0;
 
+    public void startGameOver(Stage primaryStage) {
+
+
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                StackPane root = new StackPane();
+                Scene scene = new Scene(root, 1000, 800);
+
+                final Image gameOverScreen = new Image( "ressources/backgroundGameover.png" ); //title screen image
+                final ImageView flashScreen_node = new ImageView();
+                flashScreen_node.setImage(gameOverScreen); //set the image of the title screen
+
+                root.getChildren().addAll(flashScreen_node); //add the title screen to the root
+                primaryStage.setScene(scene);
+                primaryStage.getIcons().add(gameOverScreen); //stage icon
+                primaryStage.setResizable(false);
+                primaryStage.show();
+                root.requestFocus();
+            }
+        });
+
+    }
+
+    public void checkIfDead(Ghost ghost,PacMan pacman,Stage primaryStage){
+
+        if(ghost.getX() == pacman.getX() && ghost.getY() == pacman.getY()){
+            startGameOver(primaryStage);
+        }
+    }
     public void startGame(Stage primaryStage){
         String musicFile = "src/ressources/pacman_beginning.wav";     // For example
         Media sound = new Media(new File(musicFile).toURI().toString());
@@ -136,16 +167,21 @@ public class Main extends Application {
                             tab[i][j].setImage(pacmanImages[(pacMan.getDirection()).ordinal()]);
                         }
                         else if(ghostRed.getX() == i && ghostRed.getY() == j){
+                            System.out.println("GX: "+ghostRed.getX()+" GY: "+ghostRed.getY()+"  -  PX: "+pacMan.getX()+ "PY: "+pacMan.getY());
                             tab[i][j].setImage(redGhostImages[(ghostRed.getDirection()).ordinal()]);
+                            checkIfDead(ghostRed,pacMan,primaryStage);
                         }
                         else if(ghostCyan.getX() == i && ghostCyan.getY() == j){
                             tab[i][j].setImage(cyanGhostImages[(ghostCyan.getDirection()).ordinal()]);
+                            checkIfDead(ghostCyan,pacMan,primaryStage);
                         }
                         else if(ghostPink.getX() == i && ghostPink.getY() == j){
                             tab[i][j].setImage(pinkGhostImages[(ghostPink.getDirection()).ordinal()]);
+                            checkIfDead(ghostPink,pacMan,primaryStage);
                         }
                         else if(ghostOrange.getX() == i && ghostOrange.getY() == j){
                             tab[i][j].setImage(orangeGhostImages[(ghostOrange.getDirection()).ordinal()]);
+                            checkIfDead(ghostOrange,pacMan,primaryStage);
                         }
                         else {
                             if (grille.getElement(i,j) instanceof Wall) {
@@ -223,6 +259,7 @@ public class Main extends Application {
                             scoreLabel.setText((grille.getPacman().getNbEatenPacgum())*10+ "   ");
                             if(timeSeconds==5){
                                 ghostRed.setMoveable(true);
+
                             }else if(timeSeconds==10){
                                 ghostCyan.setMoveable(true);
                             }else if(timeSeconds==15){
