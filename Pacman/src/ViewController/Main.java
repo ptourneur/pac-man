@@ -55,8 +55,11 @@ public class Main extends Application {
     private static final int Y_GHOSTORANGE = 9;
 
 
+
     private Label timerLabel = new Label();
+    private Label scoreLabel = new Label();
     private Integer timeSeconds = 0;
+    private Integer timeMinutes = 0;
 
     public void startGame(Stage primaryStage){
         String musicFile = "src/ressources/pacman_beginning.wav";     // For example
@@ -178,24 +181,46 @@ public class Main extends Application {
 
         final Image gameSidebar = new Image( "ressources/gameSidebar.png" ); //title screen image
         final ImageView flashScreen_node = new ImageView();
+        StackPane root = new StackPane();
         flashScreen_node.setImage(gameSidebar); //set the image of the title screen
         primaryStage.getIcons().add(gameSidebar); //stage icon
 
 
+
+
         // Configure the Label
-        timerLabel.setText(timeSeconds.toString()+ "         ");
+        scoreLabel.setText((grille.getPacman().getNbEatenPacgum())*10+ "   ");
+        scoreLabel.setTextFill(Color.RED);
+        scoreLabel.setStyle("-fx-font-size: 3em;");
+        // Configure the Label
+        timerLabel.setText("00:00"+ "      ");
         timerLabel.setTextFill(Color.BLUE);
         timerLabel.setStyle("-fx-font-size: 3em;");
-        timerLabel.setLayoutX(900);
-        timerLabel.setLayoutY(150);
 
-        long endTime= 999999999;
         final Timeline timeline = new Timeline(
                 new KeyFrame(
                         Duration.millis( 1000 ),
                         event -> {
                             timeSeconds++;
-                            timerLabel.setText( ( timeSeconds ).toString()+"         " );
+                            if(timeSeconds>=60){
+                                timeMinutes++;
+                                timeSeconds=0;
+                            }
+
+                            String timeToDisplay="";
+                            if(timeMinutes>=10){
+                                timeToDisplay+=timeMinutes;
+                            }else{
+                                timeToDisplay+="0"+timeMinutes;
+                            }
+                            timeToDisplay+=":";
+                            if(timeSeconds>=10){
+                                timeToDisplay+=timeSeconds;
+                            }else{
+                                timeToDisplay+="0"+timeSeconds;
+                            }
+                            timerLabel.setText( timeToDisplay+"      " );
+                            scoreLabel.setText((grille.getPacman().getNbEatenPacgum())*10+ "   ");
                             if(timeSeconds==5){
                                 ghostRed.setMoveable(true);
                             }else if(timeSeconds==10){
@@ -213,17 +238,19 @@ public class Main extends Application {
         timeline.play();
 
         grid.add(timerLabel,1,1);
-        StackPane root = new StackPane();
+
         root.getChildren().add(grid);
 
         root.getChildren().add(flashScreen_node);
 
         StackPane stackpane = new StackPane();
         StackPane.setAlignment(timerLabel, Pos.TOP_RIGHT);
-        stackpane.setLayoutX(200);
-        stackpane.getChildren().addAll(timerLabel);
+        StackPane.setAlignment(scoreLabel, Pos.BOTTOM_RIGHT);
+
+        stackpane.getChildren().addAll(timerLabel,scoreLabel);
 
         root.getChildren().add(stackpane);
+
 
 
         Scene scene = new Scene(root, 1000, 800);

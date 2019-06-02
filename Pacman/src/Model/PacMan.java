@@ -13,6 +13,22 @@ import java.util.logging.Logger;
 
 public class PacMan extends Entity {
 
+    public int getNbEatenPacgum() {
+        return nbEatenPacgum;
+    }
+
+    public void setNbEatenPacgum(int nbEatenPacgum) {
+        this.nbEatenPacgum = nbEatenPacgum;
+    }
+
+    public int getNbEatenSuperPacgum() {
+        return nbEatenSuperPacgum;
+    }
+
+    public void setNbEatenSuperPacgum(int nbEatenSuperPacgum) {
+        this.nbEatenSuperPacgum = nbEatenSuperPacgum;
+    }
+
     private int nbEatenPacgum=0,nbEatenSuperPacgum=0;
     public PacMan(int x, int y, Grid grille,CyclicBarrier cyclicBarrier) {
         super(x,y,grille,cyclicBarrier);
