@@ -14,16 +14,6 @@ import java.util.logging.Logger;
 
 public class Ghost extends Entity {
     private int numGhost;
-
-    public boolean isMoveable() {
-        return moveable;
-    }
-
-    public void setMoveable(boolean moveable) {
-        this.moveable = moveable;
-    }
-
-    private boolean moveable;
     private ArrayList<GhostStep> possibleStep;
     public Ghost(int x, int y, int numGhost, Grid grille, CyclicBarrier cyclicBarrier) {
         super(x,y, grille,cyclicBarrier);
@@ -168,42 +158,37 @@ public class Ghost extends Entity {
     }
     @Override
     public void run() {
-        Dijkstra dijkstra = new Dijkstra();
         while(true) { // spm descent dans la grille à chaque pas de temps
 
 
             //Le ghost 1 utilise une heuristique simple Manhattan
-            if(moveable){
-                if(numGhost==1){
-                    // System.out.println("Dijkstra: "+dijkstra.getDistanceToTheClosestDot(x,y,grille));
-                    direction = manhattanAlgorithm();
-                }else if(numGhost==2){
-                    direction = parrallelAlgorithm();
-                }
-                else{
-                    //direction = manhattanAlgorithm();
-                    direction=Direction.getRandomDirection();
-                }
-
-                if(direction==Direction.NORTH){
-                    if (grille.isValideMove(x, y-1)) {
-                        y--;
-                    }
-                }else if(direction==Direction.EAST){
-                    if (grille.isValideMove(x+1, y)) {
-                        x++;
-                    }
-                }else if(direction==Direction.SOUTH){
-                    if (grille.isValideMove(x, y+1)) {
-                        y++;
-                    }
-                }else if(direction==Direction.WEST){
-                    if (grille.isValideMove(x-1, y)) {
-                        x--;
-                    }
-                }
+            if(numGhost==1){
+                direction = manhattanAlgorithm();
+            }else if(numGhost==2){
+                direction = parrallelAlgorithm();
+            }
+            else{
+                //direction = manhattanAlgorithm();
+                direction=Direction.getRandomDirection();
             }
 
+            if(direction==Direction.NORTH){
+                if (grille.isValideMove(x, y-1)) {
+                    y--;
+                }
+            }else if(direction==Direction.EAST){
+                if (grille.isValideMove(x+1, y)) {
+                    x++;
+                }
+            }else if(direction==Direction.SOUTH){
+                if (grille.isValideMove(x, y+1)) {
+                    y++;
+                }
+            }else if(direction==Direction.WEST){
+                if (grille.isValideMove(x-1, y)) {
+                    x--;
+                }
+            }
 
             setChanged();
             notifyObservers(); // notification de l'observer

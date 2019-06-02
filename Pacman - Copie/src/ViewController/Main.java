@@ -1,16 +1,11 @@
 package ViewController;
 
 import Model.*;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -19,15 +14,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import javafx.scene.control.Button;
-import javafx.util.Duration;
-
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.CyclicBarrier;
@@ -54,9 +44,6 @@ public class Main extends Application {
     private static final int X_GHOSTORANGE = 10;
     private static final int Y_GHOSTORANGE = 9;
 
-
-    private Label timerLabel = new Label();
-    private Integer timeSeconds = 0;
 
     public void startGame(Stage primaryStage){
         String musicFile = "src/ressources/pacman_beginning.wav";     // For example
@@ -165,14 +152,10 @@ public class Main extends Application {
 
         pacMan.addObserver(o);
         pacMan.start(); // on démarre pacMan
-
-
         ghostRed.start();
         ghostCyan.start();
         ghostPink.start();
         ghostOrange.start();
-
-
 
 
 
@@ -181,50 +164,9 @@ public class Main extends Application {
         flashScreen_node.setImage(gameSidebar); //set the image of the title screen
         primaryStage.getIcons().add(gameSidebar); //stage icon
 
-
-        // Configure the Label
-        timerLabel.setText(timeSeconds.toString()+ "         ");
-        timerLabel.setTextFill(Color.BLUE);
-        timerLabel.setStyle("-fx-font-size: 3em;");
-        timerLabel.setLayoutX(900);
-        timerLabel.setLayoutY(150);
-
-        long endTime= 999999999;
-        final Timeline timeline = new Timeline(
-                new KeyFrame(
-                        Duration.millis( 1000 ),
-                        event -> {
-                            timeSeconds++;
-                            timerLabel.setText( ( timeSeconds ).toString()+"         " );
-                            if(timeSeconds==5){
-                                ghostRed.setMoveable(true);
-                            }else if(timeSeconds==10){
-                                ghostCyan.setMoveable(true);
-                            }else if(timeSeconds==15){
-                                ghostPink.setMoveable(true);
-                            }else if(timeSeconds==20){
-                                ghostOrange.setMoveable(true);
-                            }
-
-                        }
-                )
-        );
-        timeline.setCycleCount( Animation.INDEFINITE );
-        timeline.play();
-
-        grid.add(timerLabel,1,1);
         StackPane root = new StackPane();
         root.getChildren().add(grid);
-
         root.getChildren().add(flashScreen_node);
-
-        StackPane stackpane = new StackPane();
-        StackPane.setAlignment(timerLabel, Pos.TOP_RIGHT);
-        stackpane.setLayoutX(200);
-        stackpane.getChildren().addAll(timerLabel);
-
-        root.getChildren().add(stackpane);
-
 
         Scene scene = new Scene(root, 1000, 800);
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
@@ -248,7 +190,6 @@ public class Main extends Application {
 
         primaryStage.setTitle("Pac Man");
         primaryStage.setScene(scene);
-        primaryStage.setResizable(false);
         primaryStage.show();
 
         grid.requestFocus();
