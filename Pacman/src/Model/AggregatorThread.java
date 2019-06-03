@@ -7,6 +7,6 @@ public class AggregatorThread implements Runnable {
 
         String thisThreadName = Thread.currentThread().getName();
 
-        //System.out.println(thisThreadName + ": Final result = ");
+        System.out.println(thisThreadName + ": Final result = ");
     }
 }

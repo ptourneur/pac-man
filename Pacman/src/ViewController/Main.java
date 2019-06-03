@@ -46,7 +46,7 @@ public class Main extends Application {
     private static final int Y_PACMAN = 3;
     private Ghost ghostRed;
     private static final int X_GHOSTRED = 9;
-    private static final int Y_GHOSTRED = 7;
+    private static final int Y_GHOSTRED = 8;
     private Ghost ghostCyan;
     private static final int X_GHOSTCYAN = 8;
     private static final int Y_GHOSTCYAN = 9;
@@ -78,6 +78,19 @@ public class Main extends Application {
                 flashScreen_node.setImage(gameOverScreen); //set the image of the title screen
 
                 root.getChildren().addAll(flashScreen_node); //add the title screen to the root
+
+
+                Label scoreEndgame = new Label();
+                scoreEndgame.setText("Votre score: "+(grille.getPacman().getNbEatenPacgum())*10+ "   ");
+                scoreEndgame.setTextFill(Color.YELLOW);
+                scoreEndgame.setAlignment(Pos.BOTTOM_CENTER);
+                scoreEndgame.setStyle("-fx-font-size: 3em;");
+
+                StackPane stackpane = new StackPane();
+                stackpane.setAlignment(scoreEndgame, Pos.BOTTOM_CENTER);
+
+                root.getChildren().add(scoreEndgame);
+
                 primaryStage.setScene(scene);
                 primaryStage.getIcons().add(gameOverScreen); //stage icon
                 primaryStage.setResizable(false);
@@ -145,10 +158,10 @@ public class Main extends Application {
         rowCount = grille.getRowCount();
 
         CyclicBarrier cyclicBarrier = new CyclicBarrier(5 ,new AggregatorThread());
-        pacMan = new PacMan(X_PACMAN, Y_PACMAN, grille,cyclicBarrier);
-        ghostRed = new Ghost(X_GHOSTRED, Y_GHOSTRED, 1, grille,cyclicBarrier);
-        ghostCyan = new Ghost(X_GHOSTCYAN, Y_GHOSTCYAN, 2, grille,cyclicBarrier);
-        ghostPink = new Ghost(X_GHOSTPINK, Y_GHOSTPINK, 3, grille,cyclicBarrier);
+        pacMan      = new PacMan(X_PACMAN, Y_PACMAN, grille,cyclicBarrier);
+        ghostRed    = new Ghost(X_GHOSTRED, Y_GHOSTRED, 1, grille,cyclicBarrier);
+        ghostCyan   = new Ghost(X_GHOSTCYAN, Y_GHOSTCYAN, 2, grille,cyclicBarrier);
+        ghostPink   = new Ghost(X_GHOSTPINK, Y_GHOSTPINK, 3, grille,cyclicBarrier);
         ghostOrange = new Ghost(X_GHOSTORANGE, Y_GHOSTORANGE, 4, grille,cyclicBarrier);
 
         ArrayList<Ghost> ghosts = new ArrayList<Ghost>();
@@ -210,21 +223,21 @@ public class Main extends Application {
                         }
                     }
                 }
+
+                if(pacMan.checkGameOver()){
+                    startGameOver(primaryStage);
+                }
             }
         };
 
 
         pacMan.addObserver(o);
+        pacMan.start(); // on démarre pacMan
+
         ghostRed.start();
         ghostCyan.start();
         ghostPink.start();
         ghostOrange.start();
-        pacMan.start(); // on démarre pacMan
-
-
-
-
-
 
 
 
@@ -296,8 +309,8 @@ public class Main extends Application {
         root.getChildren().add(flashScreen_node);
 
         StackPane stackpane = new StackPane();
-        StackPane.setAlignment(timerLabel, Pos.TOP_RIGHT);
-        StackPane.setAlignment(scoreLabel, Pos.BOTTOM_RIGHT);
+        stackpane.setAlignment(timerLabel, Pos.TOP_RIGHT);
+        stackpane.setAlignment(scoreLabel, Pos.BOTTOM_RIGHT);
 
         stackpane.getChildren().addAll(timerLabel,scoreLabel);
 

@@ -55,6 +55,15 @@ public class PacMan extends Entity {
             //System.out.println(nbEatenSuperPacgum);
         }
     }
+
+    public boolean checkGameOver(){
+        for(int i=0;i<grille.getGhosts().size();i++){
+            if(grille.getGhosts().get(i).getX()==x && grille.getGhosts().get(i).getY()==y){
+                return true;
+            }
+        }
+        return false;
+    }
     public void run() {
         while(true) {
             if(x==0){
