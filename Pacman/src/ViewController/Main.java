@@ -182,10 +182,19 @@ public class Main extends Application {
             }
         }
 
-        Observer o =  new Observer() { // l'observer observe l'obervable (update est exécuté dès notifyObservers() est appelé côté modèle )
+
+
+        CyclicBarrier graphicBarrier = new CyclicBarrier(1 ,new AggregatorThread());
+        Observer pacmanObserver =  new Observer() { // l'observer observe l'obervable (update est exécuté dès notifyObservers() est appelé côté modèle )
             @Override
             public void update(Observable o, Object arg) {
-
+                try {
+                    graphicBarrier.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (BrokenBarrierException e) {
+                    e.printStackTrace();
+                }
                 for (int i = 0; i < columnCount; i++) { // rafraichissement graphique
                     for (int j = 0; j < rowCount; j++) {
                         if (pacMan.getX() == i && pacMan.getY() == j) { // pacMan est à la position i, j => le dessiner
@@ -230,14 +239,44 @@ public class Main extends Application {
             }
         };
 
+        Observer ghostObserver =  new Observer() { // l'observer observe l'obervable (update est exécuté dès notifyObservers() est appelé côté modèle )
+            @Override
+            public void update(Observable o, Object arg) {
+                for (int i = 0; i < columnCount; i++) { // rafraichissement graphique
+                    for (int j = 0; j < rowCount; j++) {
+                        if(ghostRed.getX() == i && ghostRed.getY() == j){
+                            tab[i][j].setImage(ghostRed.getScared() ? imgBlueGhost : redGhostImages[(ghostRed.getDirection()).ordinal()]);
+                        }
+                        else if(ghostCyan.getX() == i && ghostCyan.getY() == j){
+                            tab[i][j].setImage(ghostCyan.getScared() ? imgBlueGhost : cyanGhostImages[(ghostCyan.getDirection()).ordinal()]);
+                        }
+                        else if(ghostPink.getX() == i && ghostPink.getY() == j){
+                            tab[i][j].setImage(ghostPink.getScared() ? imgBlueGhost : pinkGhostImages[(ghostPink.getDirection()).ordinal()]);
+                        }
+                        else if(ghostOrange.getX() == i && ghostOrange.getY() == j){
+                            tab[i][j].setImage(ghostOrange.getScared() ? imgBlueGhost : orangeGhostImages[(ghostOrange.getDirection()).ordinal()]);
+                        }
+                    }
+                }
 
-        pacMan.addObserver(o);
+                if(pacMan.checkGameOver()){
+                    startGameOver(primaryStage);
+                }
+            }
+        };
+
+        pacMan.addObserver(pacmanObserver);
         pacMan.start(); // on démarre pacMan
 
         ghostRed.start();
+        //ghostRed.addObserver(ghostObserver);
+
         ghostCyan.start();
+        //ghostCyan.addObserver(ghostObserver);
         ghostPink.start();
+        //ghostPink.addObserver(ghostObserver);
         ghostOrange.start();
+        //ghostOrange.addObserver(ghostObserver);
 
 
 
