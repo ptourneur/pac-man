@@ -229,7 +229,7 @@ public class Ghost extends Entity {
             notifyObservers(); // notification de l'observer
 
             try {
-                Thread.sleep(200); // pause
+                Thread.sleep(175); // pause
                 this.getCyclicBarrier().await();
             } catch (InterruptedException ex) {
                 Logger.getLogger(Ghost.class.getName()).log(Level.SEVERE, null, ex);

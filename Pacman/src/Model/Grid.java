@@ -26,7 +26,7 @@ public class Grid {
     }
 
     public Grid() {
-        this.file = new File("niveaux/level1.txt");
+        this.file = new File("niveaux/level2.txt");
         this.initMapSize();
         this.grille = new GridElement[columnCount][rowCount];
         this.initMap();

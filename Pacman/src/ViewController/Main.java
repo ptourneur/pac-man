@@ -22,7 +22,6 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
 import javafx.scene.control.Button;
 import javafx.util.Duration;
 
@@ -39,6 +38,9 @@ public class Main extends Application {
 
     private int rowCount;
     private int columnCount;
+
+    private static final int WINDOW_WIDTH = 1000;
+    private static final int WINDOW_HEIGHT = 800;
 
     private Grid grille;
     private PacMan pacMan;
@@ -71,7 +73,7 @@ public class Main extends Application {
             @Override
             public void run() {
                 StackPane root = new StackPane();
-                Scene scene = new Scene(root, 1000, 800);
+                Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 
                 final Image gameOverScreen = new Image( "ressources/backgroundGameover.png" ); //title screen image
                 final ImageView flashScreen_node = new ImageView();
@@ -145,9 +147,7 @@ public class Main extends Application {
         Image imgOrangeGhostDown = new Image("ressources/orangeGhostDown.gif");
         Image[] orangeGhostImages ={imgOrangeGhostUp, imgOrangeGhostRight, imgOrangeGhostDown, imgOrangeGhostLeft};
 
-
         Image imgBlueGhost = new Image("ressources/blueGhost.gif");
-
         Image imgSmallDot = new Image("ressources/smalldot.png");
         Image imgWhiteDot = new Image("ressources/whitedot.png");
         Image imgWall = new Image("ressources/wall.png");
@@ -182,8 +182,6 @@ public class Main extends Application {
             }
         }
 
-
-
         CyclicBarrier graphicBarrier = new CyclicBarrier(1 ,new AggregatorThread());
         Observer pacmanObserver =  new Observer() { // l'observer observe l'obervable (update est exécuté dès notifyObservers() est appelé côté modèle )
             @Override
@@ -195,6 +193,20 @@ public class Main extends Application {
                 } catch (BrokenBarrierException e) {
                     e.printStackTrace();
                 }
+                for (int i = 0; i < columnCount; i++) { // rafraichissement graphique
+                    for (int j = 0; j < rowCount; j++) {
+                        if(grille.getElement(i,j) instanceof Ground){
+                            if (((Ground) grille.getElement(i,j)).getItem() instanceof  PacGum) {
+                                tab[i][j].setImage(imgSmallDot);
+                            } else if(((Ground) grille.getElement(i,j)).getItem() instanceof  SuperPacGum) {
+                                tab[i][j].setImage(imgWhiteDot);
+                            } else {
+                                tab[i][j].setImage(imgGround);
+                            }
+                        }
+                    }
+                }
+
                 for (int i = 0; i < columnCount; i++) { // rafraichissement graphique
                     for (int j = 0; j < rowCount; j++) {
                         if (pacMan.getX() == i && pacMan.getY() == j) { // pacMan est à la position i, j => le dessiner
@@ -238,7 +250,7 @@ public class Main extends Application {
                 }
             }
         };
-
+/*
         Observer ghostObserver =  new Observer() { // l'observer observe l'obervable (update est exécuté dès notifyObservers() est appelé côté modèle )
             @Override
             public void update(Observable o, Object arg) {
@@ -264,13 +276,12 @@ public class Main extends Application {
                 }
             }
         };
-
-        pacMan.addObserver(pacmanObserver);
+*/
         pacMan.start(); // on démarre pacMan
+        pacMan.addObserver(pacmanObserver);
 
         ghostRed.start();
         //ghostRed.addObserver(ghostObserver);
-
         ghostCyan.start();
         //ghostCyan.addObserver(ghostObserver);
         ghostPink.start();
@@ -285,8 +296,6 @@ public class Main extends Application {
         StackPane root = new StackPane();
         flashScreen_node.setImage(gameSidebar); //set the image of the title screen
         primaryStage.getIcons().add(gameSidebar); //stage icon
-
-
 
 
         // Configure the Label
@@ -357,7 +366,7 @@ public class Main extends Application {
 
 
 
-        Scene scene = new Scene(root, 1000, 800);
+        Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             boolean keyRecognized = true;
             KeyCode code = key.getCode();
@@ -373,8 +382,6 @@ public class Main extends Application {
             }
             pacMan.setDirection(direction);
         });
-
-
 
 
         primaryStage.setTitle("Pac Man");
@@ -396,8 +403,8 @@ public class Main extends Application {
         primaryStage.setTitle( "Super PacMan" );
         primaryStage.getIcons().add(titleScreen); //stage icon
 
-        final double CANVAS_WIDTH = 1000;
-        final double CANVAS_HEIGHT = 800;
+        final double CANVAS_WIDTH = WINDOW_WIDTH;
+        final double CANVAS_HEIGHT = WINDOW_HEIGHT;
 
         Group root = new Group();
         root.getChildren().addAll(flashScreen_node); //add the title screen to the root
@@ -415,9 +422,7 @@ public class Main extends Application {
         });
 
         root.getChildren().add(startGameButton);
-
         startGameButton.getStylesheets().add("ressources/startButtonCss.css");
-
 
         Scene theScene = new Scene( root, CANVAS_WIDTH, CANVAS_HEIGHT);
         primaryStage.setScene( theScene );
