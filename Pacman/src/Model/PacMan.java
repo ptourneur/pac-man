@@ -44,15 +44,7 @@ public class PacMan extends Entity {
             //System.out.println(nbEatenPacgum);
         }else if( ((Ground) grille.getElement(x,y)).getItem() instanceof  SuperPacGum){
             nbEatenSuperPacgum++;
-            grille.scareGhots(true);
-            Runnable unScareGhosts = new Runnable() {
-                public void run() {
-                    grille.scareGhots(false);
-                }
-            };
-            ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-            executor.scheduleAtFixedRate(unScareGhosts, 12-(nbEatenSuperPacgum*2), 10-(nbEatenSuperPacgum*2), TimeUnit.SECONDS);
-            //System.out.println(nbEatenSuperPacgum);
+            grille.scareGhots();
         }
     }
 
@@ -65,10 +57,8 @@ public class PacMan extends Entity {
                             return new Position(i,j);
                         }
                     }
-
                 }
             }
-
         }
 
         return new Position(10,9);
@@ -77,11 +67,11 @@ public class PacMan extends Entity {
     public boolean checkGameOver(){
         for(int i=0;i<grille.getGhosts().size();i++){
             if(grille.getGhosts().get(i).getX()==x && grille.getGhosts().get(i).getY()==y){
-                if((grille.getGhosts().get(i).getScared()) ){
+                if((grille.getGhosts().get(i).isScared()) ){
                     Position p = getOneGhostSpawn();
                     grille.getGhosts().get(i).setX(p.getX());
                     grille.getGhosts().get(i).setY(p.getY());
-                    grille.getGhosts().get(i).setScared(false);
+                    grille.getGhosts().get(i).setNotScared();
                 }else{
                     return true;
                 }
@@ -124,10 +114,9 @@ public class PacMan extends Entity {
                     grille.setElement(x, y, new Ground());
                     x--;
                     eatPacgum();
-
-
                 }
             }
+
             setChanged();
             notifyObservers(); // notification de l'observer
 
