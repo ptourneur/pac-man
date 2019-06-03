@@ -1,5 +1,5 @@
 W W W W W W W W W W W W W W W W W W W
-W S S S S S S S S W S S S S S S S S W
+W S S S A S S S S W S S S S A S S S W
 W B W W S W W W S W S W W W S W W B W
 W S S S S S S S S S S S S S S S S S W
 W S W W S W S W W W W W S W S W W S W
@@ -17,5 +17,5 @@ W B S W S S S S S E S S S S S W S B W
 W W S W S W S W W W W W S W S W S W W
 W S S S S W S S S W S S S W S S S S W
 W S W W W W W W S W S W W W W W W S W
-W S S S S S S S S S S S S S S S S S W
+W S S S S S S S S A S S S S S S S S W
 W W W W W W W W W W W W W W W W W W W

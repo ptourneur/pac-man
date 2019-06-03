@@ -14,7 +14,15 @@ public class Grid {
     File file;
     private int columnCount;
     private int rowCount;
+    private boolean gameOver;
 
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
 
     private int internalTimer=0;
 
@@ -62,7 +70,17 @@ public class Grid {
     }
 
     public void incrementInternalTimer() {
-        this.internalTimer=internalTimer++;
+        this.internalTimer++;
+        //System.out.println(internalTimer);
+        if(internalTimer>=20){
+            ghosts.get(3).setMoveable(true);
+        }else if(internalTimer>=15){
+            ghosts.get(2).setMoveable(true);
+        }else if(internalTimer>=10){
+            ghosts.get(1).setMoveable(true);
+        }if(internalTimer>=5){
+            ghosts.get(0).setMoveable(true);
+        }
     }
 
 
@@ -121,7 +139,41 @@ public class Grid {
         }
         return pos;
     }
+    public Position getOneGhostSpawn(){
+        for(int i=0;i<getRowCount();i++) {
+            for(int j=0;j<getColumnCount();j++) {
+                if((getElement(i,j) instanceof Ground)){
+                    if ( ((Ground) getElement(i,j)).getItem() instanceof  GhostSpawn ){
+                        if( getElement(i,j) instanceof Ground && ((Ground) getElement(i,j)).getItem() instanceof GhostSpawn){
+                            return new Position(i,j);
+                        }
+                    }
 
+                }
+            }
+
+        }
+
+        return new Position(10,9);
+    }
+    public boolean checkGameOver(){
+        for(int i=0;i<ghosts.size();i++){
+            if(ghosts.get(i).getX()==getPacman().getX() && ghosts.get(i).getY()==getPacman().getY()){
+                if((ghosts.get(i).getScared()) ){
+                    Position p = getOneGhostSpawn();
+                    ghosts.get(i).setX(p.getX());
+                    ghosts.get(i).setY(p.getY());
+                    ghosts.get(i).setScared(false);
+                    pacman.setNbEatenGhost(pacman.getNbEatenGhost()+1);
+                }else{
+                    setGameOver(true);
+                    return true;
+                }
+
+            }
+        }
+        return false;
+    }
     private Position getNeighbor(int x, int y){
         if(!(getElement(x,y) instanceof Wall))
             return new Position(x, y);
@@ -181,6 +233,9 @@ public class Grid {
                         break;
                     case "B":
                         this.setElement(column, row, new Ground(new SuperPacGum()));
+                        break;
+                    case "A":
+                        this.setElement(column, row, new Ground(new Apple()));
                         break;
                     case "E":
                         this.setElement(column, row, new Ground());
