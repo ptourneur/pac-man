@@ -80,22 +80,35 @@ public class PacMan extends Entity {
         }
         else if( ((Ground) grille.getElement(x,y)).getItem() instanceof  SuperPacGum){
             nbEatenSuperPacgum++;
-            grille.scareGhots(true);
-            Runnable unScareGhosts = new Runnable() {
-                public void run() {
-                    grille.scareGhots(false);
-                }
-            };
-            ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-            executor.scheduleAtFixedRate(unScareGhosts, 12-(nbEatenSuperPacgum*2), 10-(nbEatenSuperPacgum*2), TimeUnit.SECONDS);
-            //System.out.println(nbEatenSuperPacgum);
+            grille.scareGhots();
         }
     }
 
+    public Position getOneGhostSpawn(){
+        for(int i=0;i<grille.getRowCount();i++) {
+            for(int j=0;j<grille.getColumnCount();j++) {
+                if((this.grille.getElement(i,j) instanceof Ground)){
+                    if ( ((Ground) grille.getElement(i,j)).getItem() instanceof  GhostSpawn ){
+                        if( this.grille.getElement(i,j) instanceof Ground && ((Ground) grille.getElement(i,j)).getItem() instanceof GhostSpawn){
+                            return new Position(i,j);
+                        }
+                    }
+                }
+            }
+        }
 
 
-
-
+    public boolean checkGameOver(){
+        for(int i=0;i<grille.getGhosts().size();i++){
+            if(grille.getGhosts().get(i).getX()==x && grille.getGhosts().get(i).getY()==y){
+                if((grille.getGhosts().get(i).isScared()) ){
+                    Position p = getOneGhostSpawn();
+                    grille.getGhosts().get(i).setX(p.getX());
+                    grille.getGhosts().get(i).setY(p.getY());
+                    grille.getGhosts().get(i).setNotScared();
+                }else{
+                    return true;
+                }
 
     public void run() {
         while(true) {
@@ -129,11 +142,9 @@ public class PacMan extends Entity {
                     grille.setElement(x, y, new Ground());
                     x--;
                     eatPacgum();
-
-
                 }
             }
-            //grille.checkGameOver();
+
             setChanged();
             notifyObservers(); // notification de l'observer
 

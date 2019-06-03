@@ -4,6 +4,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Grid {
     private GridElement[][] grille;
@@ -48,12 +52,10 @@ public class Grid {
         return this.pacman;
     }
 
-    public void scareGhots(boolean scare){
+    public void scareGhots(){
         for (int i = 0; i < ghosts.size(); i++) {
-            ghosts.get(i).setScared(scare);
+            ghosts.get(i).setScared();
         }
-
-
     }
     public void setElement(int col, int row, GridElement element) {
         this.grille[col][row] = element;

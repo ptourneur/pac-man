@@ -154,6 +154,7 @@ public class Main extends Application {
         Image[] orangeGhostImages ={imgOrangeGhostUp, imgOrangeGhostRight, imgOrangeGhostDown, imgOrangeGhostLeft};
 
         Image imgBlueGhost = new Image("ressources/blueGhost.gif");
+        Image imgWhiteGhost = new Image("ressources/whiteGhost.gif");
         Image imgSmallDot = new Image("ressources/smalldot.png");
         Image imgApple = new Image("ressources/apple.png");
         Image imgWhiteDot = new Image("ressources/whitedot.png");
@@ -224,19 +225,19 @@ public class Main extends Application {
                         }
                         else if(ghostRed.getX() == i && ghostRed.getY() == j){
                             System.out.println("GX: "+ghostRed.getX()+" GY: "+ghostRed.getY()+"  -  PX: "+pacMan.getX()+ "PY: "+pacMan.getY());
-                            tab[i][j].setImage(ghostRed.getScared() ? imgBlueGhost : redGhostImages[(ghostRed.getDirection()).ordinal()]);
+                            tab[i][j].setImage(ghostRed.isScared() ? (ghostRed.isSoonNotScared() ? imgWhiteGhost : imgBlueGhost) : redGhostImages[(ghostRed.getDirection()).ordinal()]);
                             checkIfDead(ghostRed,pacMan,primaryStage);
                         }
                         else if(ghostCyan.getX() == i && ghostCyan.getY() == j){
-                            tab[i][j].setImage(ghostCyan.getScared() ? imgBlueGhost : cyanGhostImages[(ghostCyan.getDirection()).ordinal()]);
+                            tab[i][j].setImage(ghostCyan.isScared() ? (ghostCyan.isSoonNotScared() ? imgWhiteGhost : imgBlueGhost) : cyanGhostImages[(ghostCyan.getDirection()).ordinal()]);
                             checkIfDead(ghostCyan,pacMan,primaryStage);
                         }
                         else if(ghostPink.getX() == i && ghostPink.getY() == j){
-                            tab[i][j].setImage(ghostPink.getScared() ? imgBlueGhost : pinkGhostImages[(ghostPink.getDirection()).ordinal()]);
+                            tab[i][j].setImage(ghostPink.isScared() ? (ghostPink.isSoonNotScared() ? imgWhiteGhost : imgBlueGhost) : pinkGhostImages[(ghostPink.getDirection()).ordinal()]);
                             checkIfDead(ghostPink,pacMan,primaryStage);
                         }
                         else if(ghostOrange.getX() == i && ghostOrange.getY() == j){
-                            tab[i][j].setImage(ghostOrange.getScared() ? imgBlueGhost : orangeGhostImages[(ghostOrange.getDirection()).ordinal()]);
+                            tab[i][j].setImage(ghostOrange.isScared() ? (ghostOrange.isSoonNotScared() ? imgWhiteGhost : imgBlueGhost) : orangeGhostImages[(ghostOrange.getDirection()).ordinal()]);
                             checkIfDead(ghostOrange,pacMan,primaryStage);
                         }
                         else {
