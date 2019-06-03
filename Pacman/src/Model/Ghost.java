@@ -95,25 +95,25 @@ public class Ghost extends Entity {
 
         this.possibleStep.clear();
         if(direction==Direction.NORTH){
-            if (grille.isValideMove(x, y-1) && !(  ((grille.getElement(x+1,y)) instanceof  Ground) || ((grille.getElement(x-1,y)) instanceof  Ground)  ) ) {
+            if (grille.isValideMove(x, y-1,this) && !(  ((grille.getElement(x+1,y)) instanceof  Ground) || ((grille.getElement(x-1,y)) instanceof  Ground)  ) ) {
                 return this.direction;
             }
         }else if(direction==Direction.EAST){
-            if (grille.isValideMove(x+1, y) && !(  ((grille.getElement(x,y+1)) instanceof  Ground) || ((grille.getElement(x,y-1)) instanceof  Ground)  ) ) {
+            if (grille.isValideMove(x+1, y,this) && !(  ((grille.getElement(x,y+1)) instanceof  Ground) || ((grille.getElement(x,y-1)) instanceof  Ground)  ) ) {
                 return this.direction;
             }
         }else if(direction==Direction.SOUTH){
-            if (grille.isValideMove(x, y+1) && !(  ((grille.getElement(x+1,y)) instanceof  Ground) || ((grille.getElement(x-1,y)) instanceof  Ground)  ) ) {
+            if (grille.isValideMove(x, y+1,this) && !(  ((grille.getElement(x+1,y)) instanceof  Ground) || ((grille.getElement(x-1,y)) instanceof  Ground)  ) ) {
                 return this.direction;
             }
         }else if(direction==Direction.WEST){
-            if (grille.isValideMove(x-1, y) && !(  ((grille.getElement(x,y+1)) instanceof  Ground) || ((grille.getElement(x,y-1)) instanceof  Ground)  ) )  {
+            if (grille.isValideMove(x-1, y,this) && !(  ((grille.getElement(x,y+1)) instanceof  Ground) || ((grille.getElement(x,y-1)) instanceof  Ground)  ) )  {
                 return this.direction;
             }
         }
 
 
-        if(isInGrid(this.x-1,this.y-1)){
+        if(grille.isValideMove(this.x-1,this.y-1,this) ){
             //updatePossibleStep(this.x-1,this.y-1);
             if( (grille.getElement(x-1,y)) instanceof  Ground ){
                 updatePossibleStep(x-1,y,Direction.WEST);
@@ -122,10 +122,10 @@ public class Ghost extends Entity {
             }
 
         }
-        if(isInGrid(this.x,this.y-1)){
+        if(grille.isValideMove(this.x,this.y-1,this)){
             updatePossibleStep(this.x,this.y-1,Direction.NORTH);
         }
-        if(isInGrid(this.x+1,this.y-1)){
+        if(grille.isValideMove(this.x+1,this.y-1,this)){
             if( (grille.getElement(x,y-1)) instanceof  Ground ){
                 updatePossibleStep(x,y-1,Direction.NORTH);
             }else if( (grille.getElement(x+1,y)) instanceof  Ground ){
@@ -133,10 +133,10 @@ public class Ghost extends Entity {
             }
         }
 
-        if(isInGrid(this.x+1,this.y)){
+        if(grille.isValideMove(this.x+1,this.y,this)){
             updatePossibleStep(this.x+1,this.y,Direction.EAST);
         }
-        if(isInGrid(this.x+1,this.y+1)){
+        if(grille.isValideMove(this.x+1,this.y+1,this)){
             if( (grille.getElement(x+1,y)) instanceof  Ground ){
                 updatePossibleStep(x+1,y,Direction.EAST);
             }else if( (grille.getElement(x,y+1)) instanceof  Ground ){
@@ -144,17 +144,17 @@ public class Ghost extends Entity {
             }
         }
 
-        if(isInGrid(this.x,this.y+1)){
+        if(grille.isValideMove(this.x,this.y+1,this)){
             updatePossibleStep(this.x,this.y+1,Direction.SOUTH);
         }
-        if(isInGrid(this.x-1,this.y+1)){
+        if(grille.isValideMove(this.x-1,this.y+1,this)){
             if( (grille.getElement(x-1,y)) instanceof  Ground ){
                 updatePossibleStep(x-1,y,Direction.SOUTH);
             }else if( (grille.getElement(x+1,y)) instanceof  Ground ){
                 updatePossibleStep(x+1,y,Direction.WEST);
             }
         }
-        if(isInGrid(this.x-1,this.y)){
+        if(grille.isValideMove(this.x-1,this.y,this)){
             updatePossibleStep(this.x-1,this.y,Direction.WEST);
         }
 

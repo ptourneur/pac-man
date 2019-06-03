@@ -6,8 +6,8 @@ W S W W S W S W W W W W S W S W W S W
 W S S S S W S S S W S S S W S S S S W
 W W W W S W W W E W E W W W S W W W W
 E E E W S W E E E E E E E W S W E E E
-W W W W S W E W W E W W E W S W W W W
-E E E E S E E W E E E W E E S E E E E
+W W W W S W E W W G W W E W S W W W W
+E E E E S E E W G G G W E E S E E E E
 W W W W S W E W W W W W E W S W W W W
 E E E W S W E E E E E E E W S W E E E
 W W W W S W E W W W W W E W S W W W W

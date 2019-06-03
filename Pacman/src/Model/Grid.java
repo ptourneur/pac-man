@@ -75,6 +75,29 @@ public class Grid {
             return !(this.grille[newCol][newRow] instanceof Wall);
     }
 
+    public boolean isValideMove(int newCol, int newRow, Entity e) {
+
+
+        if(newCol < 0 || newRow < 0) return false;
+        if(newRow >= 21 || newCol >= 19) return false;
+
+
+        if((this.grille[newCol][newRow] instanceof Ground)){
+            if ( ((Ground) grille[newCol][newRow]).getItem() instanceof  GhostSpawn ){
+                int entityX=e.getX();
+                int entityY=e.getY();
+                if( this.grille[entityX][entityY] instanceof Ground && ((Ground) grille[entityX][entityY]).getItem() instanceof GhostSpawn){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+
+        }
+
+        return !(this.grille[newCol][newRow] instanceof Wall);
+    }
+
     public Position[] getNeighbors(int x, int y){
         Position[] pos = null;
         if((getElement(x,y) instanceof Wall)) return pos;
@@ -159,6 +182,10 @@ public class Grid {
                         break;
                     case "E":
                         this.setElement(column, row, new Ground());
+                        break;
+                    case "G":
+                        //GhostSpawn
+                        this.setElement(column, row, new Ground(new GhostSpawn()));
                         break;
                     default:
                         this.setElement(column, row, new Wall());
