@@ -27,8 +27,38 @@ public class PacMan extends Entity {
     public void setNbEatenSuperPacgum(int nbEatenSuperPacgum) {
         this.nbEatenSuperPacgum = nbEatenSuperPacgum;
     }
+    public int getScore(){
+        int score=0;
 
-    private int nbEatenPacgum=0,nbEatenSuperPacgum=0;
+        score+= nbEatenPacgum*10;
+        score+= nbEatenApple*25;
+        score+= nbEatenGhost*20;
+        score-= nbEatenSuperPacgum*15;
+
+        return score;
+    }
+    private int nbEatenPacgum=0;
+
+    public int getNbEatenGhost() {
+        return nbEatenGhost;
+    }
+
+    public void setNbEatenGhost(int nbEatenGhost) {
+        this.nbEatenGhost = nbEatenGhost;
+    }
+
+    private int nbEatenGhost=0;
+    private int nbEatenSuperPacgum=0;
+
+    public int getNbEatenApple() {
+        return nbEatenApple;
+    }
+
+    public void setNbEatenApple(int nbEatenApple) {
+        this.nbEatenApple = nbEatenApple;
+    }
+
+    private int nbEatenApple=0;
     public PacMan(int x, int y, Grid grille,CyclicBarrier cyclicBarrier) {
         super(x,y,grille,cyclicBarrier);
 
@@ -39,10 +69,16 @@ public class PacMan extends Entity {
     }
 
     public void eatPacgum(){
-        if (((Ground) grille.getElement(x,y)).getItem() instanceof  PacGum) {
+        if(grille.checkGameOver()){
+
+        }
+        else if (((Ground) grille.getElement(x,y)).getItem() instanceof  PacGum) {
             nbEatenPacgum++;
             //System.out.println(nbEatenPacgum);
-        }else if( ((Ground) grille.getElement(x,y)).getItem() instanceof  SuperPacGum){
+        }else if (((Ground) grille.getElement(x,y)).getItem() instanceof  Apple) {
+            nbEatenApple++;
+        }
+        else if( ((Ground) grille.getElement(x,y)).getItem() instanceof  SuperPacGum){
             nbEatenSuperPacgum++;
             grille.scareGhots(true);
             Runnable unScareGhosts = new Runnable() {
@@ -56,40 +92,9 @@ public class PacMan extends Entity {
         }
     }
 
-    public Position getOneGhostSpawn(){
-        for(int i=0;i<grille.getRowCount();i++) {
-            for(int j=0;j<grille.getColumnCount();j++) {
-                if((this.grille.getElement(i,j) instanceof Ground)){
-                    if ( ((Ground) grille.getElement(i,j)).getItem() instanceof  GhostSpawn ){
-                        if( this.grille.getElement(i,j) instanceof Ground && ((Ground) grille.getElement(i,j)).getItem() instanceof GhostSpawn){
-                            return new Position(i,j);
-                        }
-                    }
 
-                }
-            }
 
-        }
 
-        return new Position(10,9);
-    }
-
-    public boolean checkGameOver(){
-        for(int i=0;i<grille.getGhosts().size();i++){
-            if(grille.getGhosts().get(i).getX()==x && grille.getGhosts().get(i).getY()==y){
-                if((grille.getGhosts().get(i).getScared()) ){
-                    Position p = getOneGhostSpawn();
-                    grille.getGhosts().get(i).setX(p.getX());
-                    grille.getGhosts().get(i).setY(p.getY());
-                    grille.getGhosts().get(i).setScared(false);
-                }else{
-                    return true;
-                }
-
-            }
-        }
-        return false;
-    }
 
 
     public void run() {
@@ -128,6 +133,7 @@ public class PacMan extends Entity {
 
                 }
             }
+            //grille.checkGameOver();
             setChanged();
             notifyObservers(); // notification de l'observer
 

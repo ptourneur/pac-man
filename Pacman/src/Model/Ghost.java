@@ -220,7 +220,7 @@ public class Ghost extends Entity {
                 }
             }
 
-
+            grille.checkGameOver();
             setChanged();
             notifyObservers(); // notification de l'observer
 

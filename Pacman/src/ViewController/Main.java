@@ -88,7 +88,7 @@ public class Main extends Application {
 
 
                 Label scoreEndgame = new Label();
-                scoreEndgame.setText("Votre score: "+(grille.getPacman().getNbEatenPacgum())*10+ "   ");
+                scoreEndgame.setText("Votre score: "+(grille.getPacman().getScore()+ "   "));
                 scoreEndgame.setTextFill(Color.YELLOW);
                 scoreEndgame.setAlignment(Pos.BOTTOM_CENTER);
                 scoreEndgame.setStyle("-fx-font-size: 3em;");
@@ -155,6 +155,7 @@ public class Main extends Application {
 
         Image imgBlueGhost = new Image("ressources/blueGhost.gif");
         Image imgSmallDot = new Image("ressources/smalldot.png");
+        Image imgApple = new Image("ressources/apple.png");
         Image imgWhiteDot = new Image("ressources/whitedot.png");
         Image imgWall = new Image("ressources/wall.png");
         Image imgGround = new Image("ressources/ground.png");
@@ -246,15 +247,18 @@ public class Main extends Application {
                                     tab[i][j].setImage(imgSmallDot);
                                 } else if(((Ground) grille.getElement(i,j)).getItem() instanceof  SuperPacGum) {
                                     tab[i][j].setImage(imgWhiteDot);
-                                } else {
+                                } else if(((Ground) grille.getElement(i,j)).getItem() instanceof  Apple) {
+                                    tab[i][j].setImage(imgApple);
+                                }
+                                else {
                                     tab[i][j].setImage(imgGround);
                                 }
                             }
                         }
                     }
                 }
-
-                if(pacMan.checkGameOver()){
+                //grille.checkGameOver();
+                if(grille.isGameOver()){
                     startGameOver(primaryStage);
                 }
             }
@@ -280,14 +284,15 @@ public class Main extends Application {
                     }
                 }
 
-                if(pacMan.checkGameOver()){
+                //grille.checkGameOver();
+                if(grille.isGameOver()){
                     startGameOver(primaryStage);
                 }
             }
         };
+
 */
-        pacMan.start(); // on démarre pacMan
-        pacMan.addObserver(pacmanObserver);
+
 
         ghostRed.start();
         //ghostRed.addObserver(ghostObserver);
@@ -298,6 +303,8 @@ public class Main extends Application {
         ghostOrange.start();
         //ghostOrange.addObserver(ghostObserver);
 
+        pacMan.start(); // on démarre pacMan
+        pacMan.addObserver(pacmanObserver);
 
 
         final Image gameSidebar = new Image( "ressources/gameSidebar.png" ); //title screen image
@@ -309,7 +316,7 @@ public class Main extends Application {
 
 
         // Configure the Label
-        scoreLabel.setText("SCORE: "+(grille.getPacman().getNbEatenPacgum())*10+ "     ");
+        scoreLabel.setText("SCORE: "+(grille.getPacman().getScore()+ "     "));
         scoreLabel.setTextFill(Color.YELLOW);
         scoreLabel.setStyle("-fx-font-size: 2em;");
         // Configure the Label
@@ -342,17 +349,8 @@ public class Main extends Application {
 
                             grille.incrementInternalTimer();
                             timerLabel.setText( timeToDisplay+"      " );
-                            scoreLabel.setText("SCORE: "+(grille.getPacman().getNbEatenPacgum())*10+ "     ");
-                            if(timeSeconds==2){
-                                ghostRed.setMoveable(true);
+                            scoreLabel.setText("SCORE: "+(grille.getPacman().getScore()+ "     "));
 
-                            }else if(timeSeconds==5){
-                                ghostCyan.setMoveable(true);
-                            }else if(timeSeconds==10){
-                                ghostPink.setMoveable(true);
-                            }else if(timeSeconds==15){
-                                ghostOrange.setMoveable(true);
-                            }
 
                         }
                 )
