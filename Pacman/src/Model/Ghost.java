@@ -72,14 +72,24 @@ public class Ghost extends Entity {
         int heuristicDistance= Math.abs(grille.getPacman().getX()-x)+Math.abs(grille.getPacman().getY()-y);
 
         if(heuristicDistance<8){
+
             if(grille.getPacman().getX() > this.x){
                 if(grille.getPacman().getDirection()==Direction.WEST){
-                    return Direction.EAST;
+                    if(grille.getElement(x+1,y) instanceof Wall){
+                        return Direction.NORTH;
+                    }else{
+                        return Direction.EAST;
+                    }
+
                 }
             }
             if(grille.getPacman().getY() > this.y){
                 if(grille.getPacman().getDirection()==Direction.NORTH) {
-                    return Direction.SOUTH;
+                    if(grille.getElement(x,y-1) instanceof Wall){
+                        return Direction.EAST;
+                    }else{
+                        return Direction.SOUTH;
+                    }
                 }
             }
 
@@ -88,7 +98,7 @@ public class Ghost extends Entity {
             return manhattanAlgorithm();
         }
     }
-    public Direction manhattanAlgorithm(){
+    public Direction manhattanAlgorithm( ){
 
         this.possibleStep.clear();
         if(x==0){
@@ -163,7 +173,7 @@ public class Ghost extends Entity {
 
 
 
-        double min=99;
+        double min=99,max=0;
         GhostStep bestStep;
         if(possibleStep.size()>0){
             bestStep=possibleStep.get(0);
@@ -172,10 +182,18 @@ public class Ghost extends Entity {
         }
 
         for(int i=0; i< possibleStep.size();i++){
-            if(possibleStep.get(i).getProbability()<=min && !(grille.getElement(possibleStep.get(i).getX(),possibleStep.get(i).getY()) instanceof Wall)){
-                min=possibleStep.get(i).getProbability();
-                bestStep=possibleStep.get(i);
+            if(isScared){
+                if(possibleStep.get(i).getProbability()>=max && !(grille.getElement(possibleStep.get(i).getX(),possibleStep.get(i).getY()) instanceof Wall)){
+                    max=possibleStep.get(i).getProbability();
+                    bestStep=possibleStep.get(i);
+                }
+            }else{
+                if(possibleStep.get(i).getProbability()<=min && !(grille.getElement(possibleStep.get(i).getX(),possibleStep.get(i).getY()) instanceof Wall)){
+                    min=possibleStep.get(i).getProbability();
+                    bestStep=possibleStep.get(i);
+                }
             }
+
             //System.out.println("Possible step "+i+" : "+possibleStep.get(i).getProbability()+ " D: "+possibleStep.get(i).getDirection().toString());
         }
         //System.out.println("Best GhostStep =  X: "+bestStep.getX()+"  Y: "+bestStep.getY()+ "  - P: "+bestStep.getProbability());
@@ -200,6 +218,8 @@ public class Ghost extends Entity {
                     //direction = manhattanAlgorithm();
                     direction=Direction.getRandomDirection();
                 }
+
+
 
                 if(direction==Direction.NORTH){
                     if (grille.isValideMove(x, y-1)) {
