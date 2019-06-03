@@ -5,8 +5,7 @@
  */
 package Model;
 
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,12 +40,19 @@ public class PacMan extends Entity {
 
     public void eatPacgum(){
         if (((Ground) grille.getElement(x,y)).getItem() instanceof  PacGum) {
-
             nbEatenPacgum++;
-            System.out.println(nbEatenPacgum);
+            //System.out.println(nbEatenPacgum);
         }else if( ((Ground) grille.getElement(x,y)).getItem() instanceof  SuperPacGum){
             nbEatenSuperPacgum++;
-            System.out.println(nbEatenSuperPacgum);
+            grille.scareGhots(true);
+            Runnable unScareGhosts = new Runnable() {
+                public void run() {
+                    grille.scareGhots(false);
+                }
+            };
+            ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+            executor.scheduleAtFixedRate(unScareGhosts, 12-(nbEatenSuperPacgum*2), 10-(nbEatenSuperPacgum*2), TimeUnit.SECONDS);
+            //System.out.println(nbEatenSuperPacgum);
         }
     }
     public void run() {

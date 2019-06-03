@@ -2,6 +2,7 @@ package Model;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Grid {
@@ -10,13 +11,26 @@ public class Grid {
     private int columnCount;
     private int rowCount;
 
+
+    private int internalTimer=0;
+
     private PacMan pacman;
+    private ArrayList<Ghost> ghosts;
+
+    public ArrayList<Ghost> getGhosts() {
+        return ghosts;
+    }
+
+    public void setGhosts(ArrayList<Ghost> ghosts) {
+        this.ghosts = ghosts;
+    }
 
     public Grid() {
         this.file = new File("niveaux/level1.txt");
         this.initMapSize();
         this.grille = new GridElement[columnCount][rowCount];
         this.initMap();
+        this.ghosts = new ArrayList<Ghost>();
     }
 
     public void setPacman(PacMan pacman){
@@ -26,15 +40,38 @@ public class Grid {
         return this.pacman;
     }
 
+    public void scareGhots(boolean scare){
+        for (int i = 0; i < ghosts.size(); i++) {
+            ghosts.get(i).setScared(scare);
+        }
+
+
+    }
     public void setElement(int col, int row, GridElement element) {
         this.grille[col][row] = element;
     }
+
+    public int getInternalTimer() {
+        return internalTimer;
+    }
+
+    public void setInternalTimer(int internalTimer) {
+        this.internalTimer = internalTimer;
+    }
+
+    public void incrementInternalTimer() {
+        this.internalTimer=internalTimer++;
+    }
+
 
     public GridElement getElement(int col, int row) {
         return this.grille[col][row];
     }
 
     public boolean isValideMove(int newCol, int newRow) {
+        if(newCol < 0 || newRow < 0) return false;
+        if(newRow >= 21 || newCol >= 19) return false;
+
             return !(this.grille[newCol][newRow] instanceof Wall);
     }
 

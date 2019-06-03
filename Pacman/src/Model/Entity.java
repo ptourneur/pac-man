@@ -29,13 +29,14 @@ public abstract class Entity extends Observable implements Runnable,GridElement 
     }
 
     public boolean isInGrid(int x, int y) {
+
+        if(x < 0 || x < 0) return false;
+        if(x >= 21 || y >= 19) return false;
+
         //Check if a position is valid in the grid
         if ((grille.getElement(x,y)) instanceof  Wall) {
             return false;
         }
-
-        if(x < 0 || x < 0) return false;
-        if(x >= 21 || y >= 19) return false;
         return true;
     }
 

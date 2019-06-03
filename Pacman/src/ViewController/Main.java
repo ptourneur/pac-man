@@ -29,8 +29,10 @@ import javafx.util.Duration;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
 public class Main extends Application {
@@ -130,6 +132,9 @@ public class Main extends Application {
         Image imgOrangeGhostDown = new Image("ressources/orangeGhostDown.gif");
         Image[] orangeGhostImages ={imgOrangeGhostUp, imgOrangeGhostRight, imgOrangeGhostDown, imgOrangeGhostLeft};
 
+
+        Image imgBlueGhost = new Image("ressources/blueGhost.gif");
+
         Image imgSmallDot = new Image("ressources/smalldot.png");
         Image imgWhiteDot = new Image("ressources/whitedot.png");
         Image imgWall = new Image("ressources/wall.png");
@@ -146,8 +151,14 @@ public class Main extends Application {
         ghostPink = new Ghost(X_GHOSTPINK, Y_GHOSTPINK, 3, grille,cyclicBarrier);
         ghostOrange = new Ghost(X_GHOSTORANGE, Y_GHOSTORANGE, 4, grille,cyclicBarrier);
 
+        ArrayList<Ghost> ghosts = new ArrayList<Ghost>();
+        ghosts.add(ghostRed);
+        ghosts.add(ghostCyan);
+        ghosts.add(ghostPink);
+        ghosts.add(ghostOrange);
 
         grille.setPacman(pacMan);
+        grille.setGhosts(ghosts);
         ImageView[][] tab = new ImageView[columnCount][rowCount]; // tableau permettant de récupérer les cases graphiques lors du rafraichissement
 
         for (int i = 0; i < columnCount; i++) {
@@ -161,6 +172,7 @@ public class Main extends Application {
         Observer o =  new Observer() { // l'observer observe l'obervable (update est exécuté dès notifyObservers() est appelé côté modèle )
             @Override
             public void update(Observable o, Object arg) {
+
                 for (int i = 0; i < columnCount; i++) { // rafraichissement graphique
                     for (int j = 0; j < rowCount; j++) {
                         if (pacMan.getX() == i && pacMan.getY() == j) { // pacMan est à la position i, j => le dessiner
@@ -168,19 +180,19 @@ public class Main extends Application {
                         }
                         else if(ghostRed.getX() == i && ghostRed.getY() == j){
                             System.out.println("GX: "+ghostRed.getX()+" GY: "+ghostRed.getY()+"  -  PX: "+pacMan.getX()+ "PY: "+pacMan.getY());
-                            tab[i][j].setImage(redGhostImages[(ghostRed.getDirection()).ordinal()]);
+                            tab[i][j].setImage(ghostRed.getScared() ? imgBlueGhost : redGhostImages[(ghostRed.getDirection()).ordinal()]);
                             checkIfDead(ghostRed,pacMan,primaryStage);
                         }
                         else if(ghostCyan.getX() == i && ghostCyan.getY() == j){
-                            tab[i][j].setImage(cyanGhostImages[(ghostCyan.getDirection()).ordinal()]);
+                            tab[i][j].setImage(ghostCyan.getScared() ? imgBlueGhost : cyanGhostImages[(ghostCyan.getDirection()).ordinal()]);
                             checkIfDead(ghostCyan,pacMan,primaryStage);
                         }
                         else if(ghostPink.getX() == i && ghostPink.getY() == j){
-                            tab[i][j].setImage(pinkGhostImages[(ghostPink.getDirection()).ordinal()]);
+                            tab[i][j].setImage(ghostPink.getScared() ? imgBlueGhost : pinkGhostImages[(ghostPink.getDirection()).ordinal()]);
                             checkIfDead(ghostPink,pacMan,primaryStage);
                         }
                         else if(ghostOrange.getX() == i && ghostOrange.getY() == j){
-                            tab[i][j].setImage(orangeGhostImages[(ghostOrange.getDirection()).ordinal()]);
+                            tab[i][j].setImage(ghostOrange.getScared() ? imgBlueGhost : orangeGhostImages[(ghostOrange.getDirection()).ordinal()]);
                             checkIfDead(ghostOrange,pacMan,primaryStage);
                         }
                         else {
@@ -203,13 +215,14 @@ public class Main extends Application {
 
 
         pacMan.addObserver(o);
-        pacMan.start(); // on démarre pacMan
-
-
         ghostRed.start();
         ghostCyan.start();
         ghostPink.start();
         ghostOrange.start();
+        pacMan.start(); // on démarre pacMan
+
+
+
 
 
 
@@ -255,6 +268,8 @@ public class Main extends Application {
                             }else{
                                 timeToDisplay+="0"+timeSeconds;
                             }
+
+                            grille.incrementInternalTimer();
                             timerLabel.setText( timeToDisplay+"      " );
                             scoreLabel.setText((grille.getPacman().getNbEatenPacgum())*10+ "   ");
                             if(timeSeconds==5){

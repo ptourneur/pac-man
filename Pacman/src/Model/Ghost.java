@@ -24,6 +24,20 @@ public class Ghost extends Entity {
     }
 
     private boolean moveable;
+
+    public boolean isScared() {
+        return isScared;
+    }
+
+    public void setScared(boolean scared) {
+        isScared = scared;
+    }
+
+    public boolean getScared() {
+        return this.isScared;
+    }
+
+    private boolean isScared;
     private ArrayList<GhostStep> possibleStep;
     public Ghost(int x, int y, int numGhost, Grid grille, CyclicBarrier cyclicBarrier) {
         super(x,y, grille,cyclicBarrier);
@@ -155,14 +169,13 @@ public class Ghost extends Entity {
         }
 
         for(int i=0; i< possibleStep.size();i++){
-
             if(possibleStep.get(i).getProbability()<=min && !(grille.getElement(possibleStep.get(i).getX(),possibleStep.get(i).getY()) instanceof Wall)){
                 min=possibleStep.get(i).getProbability();
                 bestStep=possibleStep.get(i);
             }
-            System.out.println("Possible step "+i+" : "+possibleStep.get(i).getProbability()+ " D: "+possibleStep.get(i).getDirection().toString());
+            //System.out.println("Possible step "+i+" : "+possibleStep.get(i).getProbability()+ " D: "+possibleStep.get(i).getDirection().toString());
         }
-        System.out.println("Best GhostStep =  X: "+bestStep.getX()+"  Y: "+bestStep.getY()+ "  - P: "+bestStep.getProbability());
+        //System.out.println("Best GhostStep =  X: "+bestStep.getX()+"  Y: "+bestStep.getY()+ "  - P: "+bestStep.getProbability());
         return bestStep.getDirection();
         //return direction=Direction.getRandomDirection();
     }
