@@ -56,14 +56,42 @@ public class PacMan extends Entity {
         }
     }
 
+    public Position getOneGhostSpawn(){
+        for(int i=0;i<grille.getRowCount();i++) {
+            for(int j=0;j<grille.getColumnCount();j++) {
+                if((this.grille.getElement(i,j) instanceof Ground)){
+                    if ( ((Ground) grille.getElement(i,j)).getItem() instanceof  GhostSpawn ){
+                        if( this.grille.getElement(i,j) instanceof Ground && ((Ground) grille.getElement(i,j)).getItem() instanceof GhostSpawn){
+                            return new Position(i,j);
+                        }
+                    }
+
+                }
+            }
+
+        }
+
+        return new Position(10,9);
+    }
+
     public boolean checkGameOver(){
         for(int i=0;i<grille.getGhosts().size();i++){
             if(grille.getGhosts().get(i).getX()==x && grille.getGhosts().get(i).getY()==y){
-                return true;
+                if((grille.getGhosts().get(i).getScared()) ){
+                    Position p = getOneGhostSpawn();
+                    grille.getGhosts().get(i).setX(p.getX());
+                    grille.getGhosts().get(i).setY(p.getY());
+                    grille.getGhosts().get(i).setScared(false);
+                }else{
+                    return true;
+                }
+
             }
         }
         return false;
     }
+
+
     public void run() {
         while(true) {
             if(x==0){
@@ -72,6 +100,7 @@ public class PacMan extends Entity {
             else if(x==18){
                 x=0;
             }
+
             if(direction==Direction.NORTH){
                 if (grille.isValideMove(x, y-1)) {
                     grille.setElement(x, y, new Ground());

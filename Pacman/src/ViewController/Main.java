@@ -251,9 +251,9 @@ public class Main extends Application {
 
 
         // Configure the Label
-        scoreLabel.setText((grille.getPacman().getNbEatenPacgum())*10+ "   ");
-        scoreLabel.setTextFill(Color.RED);
-        scoreLabel.setStyle("-fx-font-size: 3em;");
+        scoreLabel.setText("SCORE: "+(grille.getPacman().getNbEatenPacgum())*10+ "     ");
+        scoreLabel.setTextFill(Color.YELLOW);
+        scoreLabel.setStyle("-fx-font-size: 2em;");
         // Configure the Label
         timerLabel.setText("00:00"+ "      ");
         timerLabel.setTextFill(Color.BLUE);
@@ -284,7 +284,7 @@ public class Main extends Application {
 
                             grille.incrementInternalTimer();
                             timerLabel.setText( timeToDisplay+"      " );
-                            scoreLabel.setText((grille.getPacman().getNbEatenPacgum())*10+ "   ");
+                            scoreLabel.setText("SCORE: "+(grille.getPacman().getNbEatenPacgum())*10+ "     ");
                             if(timeSeconds==5){
                                 ghostRed.setMoveable(true);
 
