@@ -37,7 +37,7 @@ public class PacMan extends Entity {
 
         return score;
     }
-    private int nbEatenPacgum=0;
+    private int nbEatenPacgum=0, lives=3;
 
     public int getNbEatenGhost() {
         return nbEatenGhost;

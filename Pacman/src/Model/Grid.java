@@ -156,7 +156,7 @@ public class Grid {
     }
     public boolean checkGameOver(){
         for(int i=0;i<ghosts.size();i++){
-            if(ghosts.get(i).getX()==getPacman().getX() && ghosts.get(i).getY()==getPacman().getY()){
+            if( ghosts.get(i).getX()==getPacman().getX() && ghosts.get(i).getY()==getPacman().getY()){
                 if((ghosts.get(i).getScared()) ){
                     Position p = getOneGhostSpawn();
                     ghosts.get(i).setX(p.getX());
