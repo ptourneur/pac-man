@@ -66,9 +66,8 @@ public class Ghost extends Entity {
             int heuristicDistance= Math.abs(grille.getPacman().getX()-x)+Math.abs(grille.getPacman().getY()-y);
             this.possibleStep.add(new GhostStep(x,y,heuristicDistance,d));
         }
-
-
     }
+
     public Direction parrallelAlgorithm(){
         int heuristicDistance= Math.abs(grille.getPacman().getX()-x)+Math.abs(grille.getPacman().getY()-y);
 
@@ -78,8 +77,6 @@ public class Ghost extends Entity {
                     return Direction.EAST;
                 }
             }
-
-
             if(grille.getPacman().getY() > this.y){
                 if(grille.getPacman().getDirection()==Direction.NORTH) {
                     return Direction.SOUTH;
@@ -118,7 +115,6 @@ public class Ghost extends Entity {
                 return this.direction;
             }
         }
-
 
         if(grille.isValideMove(this.x-1,this.y-1,this) ){
             //updatePossibleStep(this.x-1,this.y-1);

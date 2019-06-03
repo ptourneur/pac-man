@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -16,8 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -45,10 +45,10 @@ public class Main extends Application {
     private Grid grille;
     private PacMan pacMan;
     private static final int X_PACMAN = 9;
-    private static final int Y_PACMAN = 3;
+    private static final int Y_PACMAN = 2;
     private Ghost ghostRed;
     private static final int X_GHOSTRED = 9;
-    private static final int Y_GHOSTRED = 8;
+    private static final int Y_GHOSTRED = 7;
     private Ghost ghostCyan;
     private static final int X_GHOSTCYAN = 8;
     private static final int Y_GHOSTCYAN = 9;
@@ -72,8 +72,13 @@ public class Main extends Application {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                String chompFile = "src/ressources/pacmanEaten.wav";     // For example
+                Media sound = new Media(new File(chompFile).toURI().toString());
+                MediaPlayer mediaPlayer = new MediaPlayer(sound);
+                mediaPlayer.play();
+
                 StackPane root = new StackPane();
-                Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
+                Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT,Color.BLACK);
 
                 final Image gameOverScreen = new Image( "ressources/backgroundGameover.png" ); //title screen image
                 final ImageView flashScreen_node = new ImageView();
@@ -111,6 +116,7 @@ public class Main extends Application {
     }
     public void startGame(Stage primaryStage){
         String musicFile = "src/ressources/pacman_beginning.wav";     // For example
+
         Media sound = new Media(new File(musicFile).toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
         mediaPlayer.play();
@@ -185,7 +191,8 @@ public class Main extends Application {
         CyclicBarrier graphicBarrier = new CyclicBarrier(1 ,new AggregatorThread());
         Observer pacmanObserver =  new Observer() { // l'observer observe l'obervable (update est exécuté dès notifyObservers() est appelé côté modèle )
             @Override
-            public void update(Observable o, Object arg) {
+            public synchronized void update(Observable o, Object arg) {
+
                 try {
                     graphicBarrier.await();
                 } catch (InterruptedException e) {
@@ -193,6 +200,7 @@ public class Main extends Application {
                 } catch (BrokenBarrierException e) {
                     e.printStackTrace();
                 }
+                /*
                 for (int i = 0; i < columnCount; i++) { // rafraichissement graphique
                     for (int j = 0; j < rowCount; j++) {
                         if(grille.getElement(i,j) instanceof Ground){
@@ -206,6 +214,7 @@ public class Main extends Application {
                         }
                     }
                 }
+                */
 
                 for (int i = 0; i < columnCount; i++) { // rafraichissement graphique
                     for (int j = 0; j < rowCount; j++) {
@@ -295,6 +304,7 @@ public class Main extends Application {
         final ImageView flashScreen_node = new ImageView();
         StackPane root = new StackPane();
         flashScreen_node.setImage(gameSidebar); //set the image of the title screen
+        root.setBackground(new Background(new BackgroundFill(Color.rgb(20, 20, 20), CornerRadii.EMPTY, Insets.EMPTY)));
         primaryStage.getIcons().add(gameSidebar); //stage icon
 
 
@@ -333,14 +343,14 @@ public class Main extends Application {
                             grille.incrementInternalTimer();
                             timerLabel.setText( timeToDisplay+"      " );
                             scoreLabel.setText("SCORE: "+(grille.getPacman().getNbEatenPacgum())*10+ "     ");
-                            if(timeSeconds==5){
+                            if(timeSeconds==2){
                                 ghostRed.setMoveable(true);
 
-                            }else if(timeSeconds==10){
+                            }else if(timeSeconds==5){
                                 ghostCyan.setMoveable(true);
-                            }else if(timeSeconds==15){
+                            }else if(timeSeconds==10){
                                 ghostPink.setMoveable(true);
-                            }else if(timeSeconds==20){
+                            }else if(timeSeconds==15){
                                 ghostOrange.setMoveable(true);
                             }
 
@@ -357,6 +367,7 @@ public class Main extends Application {
         root.getChildren().add(flashScreen_node);
 
         StackPane stackpane = new StackPane();
+
         stackpane.setAlignment(timerLabel, Pos.TOP_RIGHT);
         stackpane.setAlignment(scoreLabel, Pos.BOTTOM_RIGHT);
 
@@ -366,7 +377,7 @@ public class Main extends Application {
 
 
 
-        Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
+        Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT,Color.BLACK);
         scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
             boolean keyRecognized = true;
             KeyCode code = key.getCode();
@@ -424,12 +435,15 @@ public class Main extends Application {
         root.getChildren().add(startGameButton);
         startGameButton.getStylesheets().add("ressources/startButtonCss.css");
 
-        Scene theScene = new Scene( root, CANVAS_WIDTH, CANVAS_HEIGHT);
+        Scene theScene = new Scene( root, CANVAS_WIDTH, CANVAS_HEIGHT,Color.BLACK);
         primaryStage.setScene( theScene );
         primaryStage.show();
 
 
-        //startGame(primaryStage);
+
+
+
+        startGame(primaryStage);
 
 
 

@@ -49,29 +49,29 @@ public abstract class Entity extends Observable implements Runnable,GridElement 
         direction=Direction.EAST;
     }
 
-    public int getX() {
+    public synchronized int getX() {
         return x;
     }
 
     @Override
-    public void setX(int x) {
+    public synchronized void setX(int x) {
         this.x=x;
     }
 
-    public int getY() {
+    public synchronized int getY() {
         return y;
     }
 
     @Override
-    public void setY(int y) {
+    public synchronized void setY(int y) {
         this.y=y;
     }
 
-    public void setDirection(Direction d) {
+    public synchronized void setDirection(Direction d) {
         this.direction=d;
     }
 
-    public Direction getDirection(){
+    public synchronized Direction getDirection(){
         return this.direction;
     }
 
