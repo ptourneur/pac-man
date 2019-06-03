@@ -57,6 +57,12 @@ public class PacMan extends Entity {
     }
     public void run() {
         while(true) {
+            if(x==0){
+                x=18;
+            }
+            else if(x==18){
+                x=0;
+            }
             if(direction==Direction.NORTH){
                 if (grille.isValideMove(x, y-1)) {
                     grille.setElement(x, y, new Ground());

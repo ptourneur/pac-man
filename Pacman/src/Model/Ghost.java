@@ -94,6 +94,13 @@ public class Ghost extends Entity {
     public Direction manhattanAlgorithm(){
 
         this.possibleStep.clear();
+        if(x==0){
+            x=18;
+        }
+        else if(x==18){
+            x=0;
+        }
+
         if(direction==Direction.NORTH){
             if (grille.isValideMove(x, y-1,this) && !(  ((grille.getElement(x+1,y)) instanceof  Ground) || ((grille.getElement(x-1,y)) instanceof  Ground)  ) ) {
                 return this.direction;
