@@ -14,34 +14,30 @@ import java.util.logging.Logger;
 
 public class Ghost extends Entity {
     private int numGhost;
-    private boolean moveable;
-    private int isScared;
 
     public boolean isMoveable() {
         return moveable;
     }
+
     public void setMoveable(boolean moveable) {
         this.moveable = moveable;
     }
+
+    private boolean moveable;
+
     public boolean isScared() {
-        return isScared > 0;
-    }
-    public boolean isSoonNotScared(){
-        return (isScared > 0 && isScared <= 2000);
-    }
-    public void setScared() {
-        isScared = 9000;
-    }
-    public void setNotScared() {
-        isScared = 0;
-    }
-    public int getScared() {
-        return this.isScared;
-    }
-    public void reduceTimeScared(int time) {
-        isScared = isScared - time;
+        return isScared;
     }
 
+    public void setScared(boolean scared) {
+        isScared = scared;
+    }
+
+    public boolean getScared() {
+        return this.isScared;
+    }
+
+    private boolean isScared;
     private ArrayList<GhostStep> possibleStep;
     public Ghost(int x, int y, int numGhost, Grid grille, CyclicBarrier cyclicBarrier) {
         super(x,y, grille,cyclicBarrier);
@@ -214,7 +210,7 @@ public class Ghost extends Entity {
             if(moveable){
                 if(numGhost==1){
                     // System.out.println("Dijkstra: "+dijkstra.getDistanceToTheClosestDot(x,y,grille));
-                    direction = Direction.getRandomDirection();
+                    direction = manhattanAlgorithm();
                 }else if(numGhost==2){
                     direction = parrallelAlgorithm();
                 }
@@ -243,10 +239,8 @@ public class Ghost extends Entity {
                     }
                 }
             }
-            if (isScared()) {
-                reduceTimeScared(175);
-            }
 
+            grille.checkGameOver();
             setChanged();
             notifyObservers(); // notification de l'observer
 

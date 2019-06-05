@@ -4,10 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class Grid {
     private GridElement[][] grille;
@@ -52,10 +48,12 @@ public class Grid {
         return this.pacman;
     }
 
-    public void scareGhots(){
+    public void scareGhots(boolean scare){
         for (int i = 0; i < ghosts.size(); i++) {
-            ghosts.get(i).setScared();
+            ghosts.get(i).setScared(scare);
         }
+
+
     }
     public void setElement(int col, int row, GridElement element) {
         this.grille[col][row] = element;
@@ -158,7 +156,7 @@ public class Grid {
     }
     public boolean checkGameOver(){
         for(int i=0;i<ghosts.size();i++){
-            if( ghosts.get(i).getX()==getPacman().getX() && ghosts.get(i).getY()==getPacman().getY()){
+            if(ghosts.get(i).getX()==getPacman().getX() && ghosts.get(i).getY()==getPacman().getY()){
                 if((ghosts.get(i).getScared()) ){
                     Position p = getOneGhostSpawn();
                     ghosts.get(i).setX(p.getX());
