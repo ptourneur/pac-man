@@ -46,10 +46,11 @@ public class Ghost extends Entity {
     }
 
     private ArrayList<GhostStep> possibleStep;
-    public Ghost(int x, int y, int numGhost, Grid grille, CyclicBarrier cyclicBarrier) {
-        super(x,y, grille,cyclicBarrier);
+
+    public Ghost(int x, int y, int numGhost, Grid grille) {
+        super(x,y, grille);
         this.numGhost = numGhost;
-        this.possibleStep=new ArrayList<GhostStep>();
+        this.possibleStep=new ArrayList<>();
     }
 
 

@@ -44,20 +44,10 @@ public class Main extends Application {
 
     private Grid grille;
     private PacMan pacMan;
-    private static final int X_PACMAN = 9;
-    private static final int Y_PACMAN = 2;
     private Ghost ghostRed;
-    private static final int X_GHOSTRED = 9;
-    private static final int Y_GHOSTRED = 7;
     private Ghost ghostCyan;
-    private static final int X_GHOSTCYAN = 8;
-    private static final int Y_GHOSTCYAN = 9;
     private Ghost ghostPink;
-    private static final int X_GHOSTPINK = 9;
-    private static final int Y_GHOSTPINK = 9;
     private Ghost ghostOrange;
-    private static final int X_GHOSTORANGE = 10;
-    private static final int Y_GHOSTORANGE = 9;
 
 
 
@@ -69,15 +59,13 @@ public class Main extends Application {
 
     public void startGameOver(Stage primaryStage) {
 
-
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                String chompFile = "src/ressources/pacmanEaten.wav";     // For example
-                Media sound = new Media(new File(chompFile).toURI().toString());
+                Media sound = new Media(new File("src/ressources/pacmanEaten.wav").toURI().toString());
                 MediaPlayer mediaPlayer = new MediaPlayer(sound);
                 mediaPlayer.play();
-
+                
                 StackPane root = new StackPane();
                 Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT,Color.BLACK);
 
@@ -110,11 +98,11 @@ public class Main extends Application {
     }
 
     public void checkIfDead(Ghost ghost,PacMan pacman,Stage primaryStage){
-
         if(ghost.getX() == pacman.getX() && ghost.getY() == pacman.getY()){
             startGameOver(primaryStage);
         }
     }
+
     public void startGame(Stage primaryStage){
         String musicFile = "src/ressources/pacman_beginning.wav";     // For example
 
@@ -167,20 +155,16 @@ public class Main extends Application {
         rowCount = grille.getRowCount();
 
         CyclicBarrier cyclicBarrier = new CyclicBarrier(5 ,new AggregatorThread());
-        pacMan      = new PacMan(X_PACMAN, Y_PACMAN, grille,cyclicBarrier);
-        ghostRed    = new Ghost(X_GHOSTRED, Y_GHOSTRED, 1, grille,cyclicBarrier);
-        ghostCyan   = new Ghost(X_GHOSTCYAN, Y_GHOSTCYAN, 2, grille,cyclicBarrier);
-        ghostPink   = new Ghost(X_GHOSTPINK, Y_GHOSTPINK, 3, grille,cyclicBarrier);
-        ghostOrange = new Ghost(X_GHOSTORANGE, Y_GHOSTORANGE, 4, grille,cyclicBarrier);
+        ArrayList<Ghost> ghosts = grille.getGhosts();
+        pacMan      = grille.getPacman();
+        ghostRed    = ghosts.get(0);
+        ghostCyan   = ghosts.get(1);
+        ghostPink   = ghosts.get(2);
+        ghostOrange = ghosts.get(3);
 
-        ArrayList<Ghost> ghosts = new ArrayList<Ghost>();
-        ghosts.add(ghostRed);
-        ghosts.add(ghostCyan);
-        ghosts.add(ghostPink);
-        ghosts.add(ghostOrange);
+        pacMan.setCyclicBarrier(cyclicBarrier);
+        ghosts.forEach(ghost -> ghost.setCyclicBarrier(cyclicBarrier));
 
-        grille.setPacman(pacMan);
-        grille.setGhosts(ghosts);
         ImageView[][] tab = new ImageView[columnCount][rowCount]; // tableau permettant de récupérer les cases graphiques lors du rafraichissement
 
         for (int i = 0; i < columnCount; i++) {

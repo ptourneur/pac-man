@@ -11,6 +11,9 @@ public class Grid {
     private int columnCount;
     private int rowCount;
     private boolean gameOver;
+    private int internalTimer=0;
+    private PacMan pacman;
+    private ArrayList<Ghost> ghosts;
 
     public boolean isGameOver() {
         return gameOver;
@@ -20,25 +23,16 @@ public class Grid {
         this.gameOver = gameOver;
     }
 
-    private int internalTimer=0;
-
-    private PacMan pacman;
-    private ArrayList<Ghost> ghosts;
-
     public ArrayList<Ghost> getGhosts() {
         return ghosts;
     }
 
-    public void setGhosts(ArrayList<Ghost> ghosts) {
-        this.ghosts = ghosts;
-    }
-
     public Grid() {
-        this.file = new File("niveaux/level2.txt");
+        this.file = new File("niveaux/level3.txt");
         this.initMapSize();
         this.grille = new GridElement[columnCount][rowCount];
+        this.ghosts = new ArrayList<>();
         this.initMap();
-        this.ghosts = new ArrayList<Ghost>();
     }
 
     public void setPacman(PacMan pacman){
@@ -100,7 +94,7 @@ public class Grid {
             if ( ((Ground) grille[newCol][newRow]).getItem() instanceof  GhostSpawn ){
                 int entityX=e.getX();
                 int entityY=e.getY();
-                if( this.grille[entityX][entityY] instanceof Ground && ((Ground) grille[entityX][entityY]).getItem() instanceof GhostSpawn){
+                if( this.grille[entityX][entityY] instanceof Ground && ((Ground) grille[entityX][entityY]).getItem() instanceof GhostSpawn && newCol < entityX){
                     return true;
                 }else{
                     return false;
@@ -221,6 +215,7 @@ public class Grid {
             e.printStackTrace();
         }
         int row = 0;
+        int numGhost = 1;
         while(scanner.hasNextLine()) {
             int column = 0;
             String line = scanner.nextLine();
@@ -246,7 +241,12 @@ public class Grid {
                     case "G":
                         //GhostSpawn
                         this.setElement(column, row, new Ground(new GhostSpawn()));
+                        ghosts.add(new Ghost(column, row, numGhost, this));
+                        numGhost++;
                         break;
+                    case "P":
+                        this.setElement(column, row, new Ground());
+                        pacman = new PacMan(column, row, this);
                     default:
                         this.setElement(column, row, new Wall());
                 }

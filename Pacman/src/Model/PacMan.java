@@ -11,6 +11,11 @@ import java.util.logging.Logger;
 
 
 public class PacMan extends Entity {
+    private int nbEatenApple=0;
+    private int nbEatenPacgum=0;
+    private int lives=3;
+    private int nbEatenGhost=0;
+    private int nbEatenSuperPacgum=0;
 
     public int getNbEatenPacgum() {
         return nbEatenPacgum;
@@ -37,8 +42,6 @@ public class PacMan extends Entity {
 
         return score;
     }
-    private int nbEatenPacgum=0;
-    private int lives=3;
 
     public int getLives() {
         return lives;
@@ -60,9 +63,6 @@ public class PacMan extends Entity {
         this.nbEatenGhost = nbEatenGhost;
     }
 
-    private int nbEatenGhost=0;
-    private int nbEatenSuperPacgum=0;
-
     public int getNbEatenApple() {
         return nbEatenApple;
     }
@@ -71,10 +71,8 @@ public class PacMan extends Entity {
         this.nbEatenApple = nbEatenApple;
     }
 
-    private int nbEatenApple=0;
-    public PacMan(int x, int y, Grid grille,CyclicBarrier cyclicBarrier) {
-        super(x,y,grille,cyclicBarrier);
-
+    public PacMan(int x, int y, Grid grille) {
+        super(x,y,grille);
     }
 
     public void start() {
@@ -95,11 +93,6 @@ public class PacMan extends Entity {
             grille.scareGhots(true);
         }
     }
-
-
-
-
-
 
     public void run() {
         while(true) {
@@ -150,7 +143,6 @@ public class PacMan extends Entity {
             } catch (BrokenBarrierException e) {
                 e.printStackTrace();
             }
-
         }
     }
 }
