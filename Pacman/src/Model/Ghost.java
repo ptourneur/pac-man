@@ -14,6 +14,8 @@ import java.util.logging.Logger;
 
 public class Ghost extends Entity {
     private int numGhost;
+    private boolean moveable;
+    private int isScared;
 
     public boolean isMoveable() {
         return moveable;
@@ -23,21 +25,26 @@ public class Ghost extends Entity {
         this.moveable = moveable;
     }
 
-    private boolean moveable;
-
     public boolean isScared() {
-        return isScared;
+        return isScared > 0;
     }
 
-    public void setScared(boolean scared) {
-        isScared = scared;
+    public boolean isSoonNotScared(){
+        return (isScared > 0 && isScared <= 2000);
     }
 
-    public boolean getScared() {
+    public void setScared(boolean isOrNot) {
+        isScared = (isOrNot ? 9000 : 0);
+    }
+
+    public void reduceTimeScared(int time) {
+        isScared = isScared - time;
+    }
+
+    public int getScared() {
         return this.isScared;
     }
 
-    private boolean isScared;
     private ArrayList<GhostStep> possibleStep;
     public Ghost(int x, int y, int numGhost, Grid grille, CyclicBarrier cyclicBarrier) {
         super(x,y, grille,cyclicBarrier);
@@ -182,7 +189,7 @@ public class Ghost extends Entity {
         }
 
         for(int i=0; i< possibleStep.size();i++){
-            if(isScared){
+            if(isScared()){
                 if(possibleStep.get(i).getProbability()>=max && !(grille.getElement(possibleStep.get(i).getX(),possibleStep.get(i).getY()) instanceof Wall)){
                     max=possibleStep.get(i).getProbability();
                     bestStep=possibleStep.get(i);
@@ -238,6 +245,9 @@ public class Ghost extends Entity {
                         x--;
                     }
                 }
+            }
+            if (isScared()) {
+                reduceTimeScared(175);
             }
 
             grille.checkGameOver();

@@ -49,11 +49,7 @@ public class Grid {
     }
 
     public void scareGhots(boolean scare){
-        for (int i = 0; i < ghosts.size(); i++) {
-            ghosts.get(i).setScared(scare);
-        }
-
-
+            ghosts.forEach(ghost -> ghost.setScared(scare));
     }
     public void setElement(int col, int row, GridElement element) {
         this.grille[col][row] = element;
@@ -157,7 +153,7 @@ public class Grid {
     public boolean checkGameOver(){
         for(int i=0;i<ghosts.size();i++){
             if(ghosts.get(i).getX()==getPacman().getX() && ghosts.get(i).getY()==getPacman().getY()){
-                if((ghosts.get(i).getScared()) ){
+                if((ghosts.get(i).isScared()) ){
                     Position p = getOneGhostSpawn();
                     ghosts.get(i).setX(p.getX());
                     ghosts.get(i).setY(p.getY());

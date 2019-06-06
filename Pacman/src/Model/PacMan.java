@@ -74,21 +74,12 @@ public class PacMan extends Entity {
         }
         else if (((Ground) grille.getElement(x,y)).getItem() instanceof  PacGum) {
             nbEatenPacgum++;
-            //System.out.println(nbEatenPacgum);
         }else if (((Ground) grille.getElement(x,y)).getItem() instanceof  Apple) {
             nbEatenApple++;
         }
         else if( ((Ground) grille.getElement(x,y)).getItem() instanceof  SuperPacGum){
             nbEatenSuperPacgum++;
             grille.scareGhots(true);
-            Runnable unScareGhosts = new Runnable() {
-                public void run() {
-                    grille.scareGhots(false);
-                }
-            };
-            ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-            executor.scheduleAtFixedRate(unScareGhosts, 12-(nbEatenSuperPacgum*2), 10-(nbEatenSuperPacgum*2), TimeUnit.SECONDS);
-            //System.out.println(nbEatenSuperPacgum);
         }
     }
 
