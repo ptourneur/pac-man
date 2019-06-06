@@ -160,8 +160,17 @@ public class Grid {
                     ghosts.get(i).setScared(false);
                     pacman.setNbEatenGhost(pacman.getNbEatenGhost()+1);
                 }else{
-                    setGameOver(true);
-                    return true;
+                    if(getPacman().getLives()>0){
+                        getPacman().reduceOneLife();
+                        getPacman().setX(9);
+                        getPacman().setY(1);
+
+                        return false;
+                    }else{
+                        setGameOver(true);
+                        return true;
+                    }
+
                 }
 
             }

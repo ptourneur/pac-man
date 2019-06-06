@@ -63,6 +63,7 @@ public class Main extends Application {
 
     private Label timerLabel = new Label();
     private Label scoreLabel = new Label();
+    private Label livesLabel = new Label();
     private Integer timeSeconds = 0;
     private Integer timeMinutes = 0;
 
@@ -350,6 +351,11 @@ public class Main extends Application {
 
                             grille.incrementInternalTimer();
                             timerLabel.setText( timeToDisplay+"      " );
+                            String textLives=" ";
+                            for(int lf=0;lf<grille.getPacman().getLives();lf++){
+                                textLives+="❤ ";
+                            }
+                            livesLabel.setText(textLives+"  ");
                             scoreLabel.setText("SCORE: "+(grille.getPacman().getScore()+ "     "));
 
 
@@ -368,9 +374,16 @@ public class Main extends Application {
         StackPane stackpane = new StackPane();
 
         stackpane.setAlignment(timerLabel, Pos.TOP_RIGHT);
-        stackpane.setAlignment(scoreLabel, Pos.BOTTOM_RIGHT);
 
-        stackpane.getChildren().addAll(timerLabel,scoreLabel);
+        livesLabel.setText(" ❤ ❤ ❤   ");
+        livesLabel.setTextFill(Color.RED);
+        livesLabel.setStyle("-fx-font-size: 3.5em;");
+
+
+        stackpane.setAlignment(scoreLabel, Pos.BOTTOM_RIGHT);
+        stackpane.setAlignment(livesLabel, Pos.CENTER_RIGHT);
+
+        stackpane.getChildren().addAll(timerLabel,scoreLabel,livesLabel);
 
         root.getChildren().add(stackpane);
 

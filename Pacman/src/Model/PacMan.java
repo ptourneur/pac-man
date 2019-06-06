@@ -38,6 +38,19 @@ public class PacMan extends Entity {
         return score;
     }
     private int nbEatenPacgum=0;
+    private int lives=3;
+
+    public int getLives() {
+        return lives;
+    }
+    public int reduceOneLife() {
+        lives--;
+        return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
 
     public int getNbEatenGhost() {
         return nbEatenGhost;
