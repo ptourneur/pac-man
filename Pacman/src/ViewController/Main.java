@@ -97,7 +97,6 @@ public class Main extends Application {
 
     public void checkIfDead(Ghost ghost,PacMan pacman,Stage primaryStage){
         if(ghost.getX() == pacman.getX() && ghost.getY() == pacman.getY()){
-            grille.checkGameOver();
             if(grille.isGameOver()){
                 startGameOver(primaryStage);
             }
@@ -172,17 +171,9 @@ public class Main extends Application {
             }
         }
 
-        //CyclicBarrier graphicBarrier = new CyclicBarrier(1 );
         Observer pacmanObserver =  new Observer() { // l'observer observe l'obervable (update est exécuté dès notifyObservers() est appelé côté modèle )
             @Override
             public synchronized void update(Observable o, Object arg) {
-                //try {
-                //    graphicBarrier.await();
-                //} catch (InterruptedException e) {
-                //    e.printStackTrace();
-                //} catch (BrokenBarrierException e) {
-                //    e.printStackTrace();
-                //}
                 for (int i = 0; i < columnCount; i++) { // rafraichissement graphique
                     for (int j = 0; j < rowCount; j++) {
                         if (pacMan.getX() == i && pacMan.getY() == j) { // pacMan est à la position i, j => le dessiner
@@ -239,8 +230,6 @@ public class Main extends Application {
         StackPane root = new StackPane();
         flashScreen_node.setImage(gameSidebar); //set the image of the title screen
         root.setBackground(new Background(new BackgroundFill(Color.rgb(20, 20, 20), CornerRadii.EMPTY, Insets.EMPTY)));
-        primaryStage.getIcons().add(gameSidebar); //stage icon
-
 
         // Configure the Label
         scoreLabel.setText("SCORE: "+(grille.getPacman().getScore()+ "     "));
@@ -341,12 +330,12 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
 
         final Image titleScreen = new Image( "ressources/backgroundTitle.png" ); //title screen image
-
+        final Image pacmanIco = new Image("ressources/pacmanIco.png");
         final ImageView flashScreen_node = new ImageView();
         flashScreen_node.setImage(titleScreen); //set the image of the title screen
 
         primaryStage.setTitle( "Super PacMan" );
-        primaryStage.getIcons().add(titleScreen); //stage icon
+        primaryStage.getIcons().add(pacmanIco); //stage icon
 
         final double CANVAS_WIDTH = WINDOW_WIDTH;
         final double CANVAS_HEIGHT = WINDOW_HEIGHT;
@@ -372,16 +361,6 @@ public class Main extends Application {
         Scene theScene = new Scene( root, CANVAS_WIDTH, CANVAS_HEIGHT,Color.BLACK);
         primaryStage.setScene( theScene );
         primaryStage.show();
-
-
-
-
-
-        //startGame(primaryStage);
-
-
-
-
     }
 
     /**

@@ -188,12 +188,8 @@ public class Ghost extends Entity {
                     bestStep=possibleStep.get(i);
                 }
             }
-
-            //System.out.println("Possible step "+i+" : "+possibleStep.get(i).getProbability()+ " D: "+possibleStep.get(i).getDirection().toString());
         }
-        //System.out.println("Best GhostStep =  X: "+bestStep.getX()+"  Y: "+bestStep.getY()+ "  - P: "+bestStep.getProbability());
         return bestStep.getDirection();
-        //return direction=Direction.getRandomDirection();
     }
     @Override
     public void run() {
@@ -212,9 +208,7 @@ public class Ghost extends Entity {
                 if( grille.getElement(x,y) instanceof Ground && ((Ground) grille.getElement(x,y)).getItem() instanceof GhostSpawn){
                     if(grille.getElement(x,y-1) instanceof Ground){
                         direction=Direction.NORTH;
-                    }/*else if(grille.getElement(x-1,y) instanceof Ground){
-                        direction=Direction.WEST;
-                    }*/
+                    }
                 }
                 if(x==0){
                     x=18;

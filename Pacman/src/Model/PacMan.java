@@ -122,7 +122,6 @@ public class PacMan extends Entity {
 
     public void run() {
         while(lives>0) {
-            System.out.println("Lives: "+lives);
             if(x==0){
                 x=18;
             }
@@ -153,11 +152,8 @@ public class PacMan extends Entity {
                     grille.setElement(x, y, new Ground());
                     x--;
                     eatPacgum();
-
-
                 }
             }
-            //grille.checkGameOver();
             setChanged();
             notifyObservers(); // notification de l'observer
 

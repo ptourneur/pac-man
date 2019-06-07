@@ -38,7 +38,6 @@ public class Grid {
         this.nbPacgum=0;
         this.cyclicBarrier = new CyclicBarrier(5 );
         this.initMap();
-
     }
 
     public void setPacman(PacMan pacman){
@@ -65,7 +64,6 @@ public class Grid {
 
     public void incrementInternalTimer() {
         this.internalTimer++;
-        //System.out.println(internalTimer);
         if(internalTimer>=12){
             ghosts.get(3).setMoveable(true);
         }else if(internalTimer>=10){
@@ -111,7 +109,6 @@ public class Grid {
                             return new Position(i,j);
                         }
                     }
-
                 }
             }
         }
@@ -130,7 +127,6 @@ public class Grid {
                 }else{
                     getPacman().reduceOneLife();
                     if(getPacman().getLives()>0){
-                        System.out.println("Reducing one life: "+ghosts.get(i).getNumGhost());
                         getPacman().setX(getPacman().getSpawnX());
                         getPacman().setY(getPacman().getSpawnY());
                         return false;
