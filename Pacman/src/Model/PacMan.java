@@ -17,6 +17,10 @@ public class PacMan extends Entity {
     private int nbEatenGhost=0;
     private int nbEatenSuperPacgum=0;
 
+    public PacMan(int x, int y, Grid grille) {
+        super(x,y,grille);
+    }
+
     public int getNbEatenPacgum() {
         return nbEatenPacgum;
     }
@@ -69,10 +73,6 @@ public class PacMan extends Entity {
 
     public void setNbEatenApple(int nbEatenApple) {
         this.nbEatenApple = nbEatenApple;
-    }
-
-    public PacMan(int x, int y, Grid grille) {
-        super(x,y,grille);
     }
 
     public void start() {

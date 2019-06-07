@@ -28,7 +28,7 @@ public class Grid {
     }
 
     public Grid() {
-        this.file = new File("niveaux/level3.txt");
+        this.file = new File("niveaux/level2.txt");
         this.initMapSize();
         this.grille = new GridElement[columnCount][rowCount];
         this.ghosts = new ArrayList<>();
@@ -71,7 +71,6 @@ public class Grid {
         }
     }
 
-
     public GridElement getElement(int col, int row) {
         return this.grille[col][row];
     }
@@ -85,10 +84,8 @@ public class Grid {
 
     public boolean isValideMove(int newCol, int newRow, Entity e) {
 
-
         if(newCol < 0 || newRow < 0) return false;
         if(newRow >= 21 || newCol >= 19) return false;
-
 
         if((this.grille[newCol][newRow] instanceof Ground)){
             if ( ((Ground) grille[newCol][newRow]).getItem() instanceof  GhostSpawn ){
@@ -100,9 +97,7 @@ public class Grid {
                     return false;
                 }
             }
-
         }
-
         return !(this.grille[newCol][newRow] instanceof Wall);
     }
 
@@ -127,6 +122,7 @@ public class Grid {
         }
         return pos;
     }
+
     public Position getOneGhostSpawn(){
         for(int i=0;i<getRowCount();i++) {
             for(int j=0;j<getColumnCount();j++) {
@@ -139,11 +135,10 @@ public class Grid {
 
                 }
             }
-
         }
-
         return new Position(10,9);
     }
+
     public boolean checkGameOver(){
         for(int i=0;i<ghosts.size();i++){
             if(ghosts.get(i).getX()==getPacman().getX() && ghosts.get(i).getY()==getPacman().getY()){
@@ -158,19 +153,17 @@ public class Grid {
                         getPacman().reduceOneLife();
                         getPacman().setX(9);
                         getPacman().setY(1);
-
                         return false;
                     }else{
                         setGameOver(true);
                         return true;
                     }
-
                 }
-
             }
         }
         return false;
     }
+
     private Position getNeighbor(int x, int y){
         if(!(getElement(x,y) instanceof Wall))
             return new Position(x, y);

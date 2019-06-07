@@ -49,8 +49,6 @@ public class Main extends Application {
     private Ghost ghostPink;
     private Ghost ghostOrange;
 
-
-
     private Label timerLabel = new Label();
     private Label scoreLabel = new Label();
     private Label livesLabel = new Label();
@@ -65,7 +63,7 @@ public class Main extends Application {
                 Media sound = new Media(new File("src/ressources/pacmanEaten.wav").toURI().toString());
                 MediaPlayer mediaPlayer = new MediaPlayer(sound);
                 mediaPlayer.play();
-                
+
                 StackPane root = new StackPane();
                 Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT,Color.BLACK);
 
@@ -104,9 +102,7 @@ public class Main extends Application {
     }
 
     public void startGame(Stage primaryStage){
-        String musicFile = "src/ressources/pacman_beginning.wav";     // For example
-
-        Media sound = new Media(new File(musicFile).toURI().toString());
+        Media sound = new Media(new File("src/ressources/pacman_beginning.wav").toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
         mediaPlayer.play();
 

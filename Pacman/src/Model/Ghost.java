@@ -16,6 +16,13 @@ public class Ghost extends Entity {
     private int numGhost;
     private boolean moveable;
     private int isScared;
+    private ArrayList<GhostStep> possibleStep;
+
+    public Ghost(int x, int y, int numGhost, Grid grille) {
+        super(x,y, grille);
+        this.numGhost = numGhost;
+        this.possibleStep=new ArrayList<>();
+    }
 
     public boolean isMoveable() {
         return moveable;
@@ -45,15 +52,6 @@ public class Ghost extends Entity {
         return this.isScared;
     }
 
-    private ArrayList<GhostStep> possibleStep;
-
-    public Ghost(int x, int y, int numGhost, Grid grille) {
-        super(x,y, grille);
-        this.numGhost = numGhost;
-        this.possibleStep=new ArrayList<>();
-    }
-
-
     public int getNumGhost() {
         return numGhost;
     }
@@ -65,9 +63,6 @@ public class Ghost extends Entity {
     public void start() {
         new Thread(this).start();
     }
-
-
-
 
     public void updatePossibleStep(int x,int y,Direction d){
         if( !((grille.getElement(x,y)) instanceof  Wall) && !( (this.direction==Direction.NORTH && d==Direction.SOUTH) || (this.direction==Direction.WEST && d==Direction.EAST)) ) {
@@ -106,8 +101,8 @@ public class Ghost extends Entity {
             return manhattanAlgorithm();
         }
     }
-    public Direction manhattanAlgorithm( ){
 
+    public Direction manhattanAlgorithm( ){
         this.possibleStep.clear();
         if(x==0){
             x=18;
@@ -213,7 +208,6 @@ public class Ghost extends Entity {
         Dijkstra dijkstra = new Dijkstra();
         while(true) { // spm descent dans la grille à chaque pas de temps
 
-
             //Le ghost 1 utilise une heuristique simple Manhattan
             if(moveable){
                 if(numGhost==1){
@@ -226,9 +220,6 @@ public class Ghost extends Entity {
                     //direction = manhattanAlgorithm();
                     direction=Direction.getRandomDirection();
                 }
-
-
-
                 if(direction==Direction.NORTH){
                     if (grille.isValideMove(x, y-1)) {
                         y--;
@@ -263,10 +254,6 @@ public class Ghost extends Entity {
             } catch (BrokenBarrierException e) {
                 e.printStackTrace();
             }
-
         }
-
     }
-
-
 }
