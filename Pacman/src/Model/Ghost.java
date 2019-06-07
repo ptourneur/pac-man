@@ -74,7 +74,7 @@ public class Ghost extends Entity {
     public Direction parrallelAlgorithm(){
         int heuristicDistance= Math.abs(grille.getPacman().getX()-x)+Math.abs(grille.getPacman().getY()-y);
 
-        if(heuristicDistance<8){
+        if(heuristicDistance<6){
 
             if(grille.getPacman().getX() > this.x){
                 if(grille.getPacman().getDirection()==Direction.WEST){
@@ -104,12 +104,7 @@ public class Ghost extends Entity {
 
     public Direction manhattanAlgorithm( ){
         this.possibleStep.clear();
-        if(x==0){
-            x=18;
-        }
-        else if(x==18){
-            x=0;
-        }
+
 
         if(direction==Direction.NORTH){
             if (grille.isValideMove(x, y-1,this) && !(  ((grille.getElement(x+1,y)) instanceof  Ground) || ((grille.getElement(x-1,y)) instanceof  Ground)  ) ) {
@@ -174,8 +169,6 @@ public class Ghost extends Entity {
             updatePossibleStep(this.x-1,this.y,Direction.WEST);
         }
 
-
-
         double min=99,max=0;
         GhostStep bestStep;
         if(possibleStep.size()>0){
@@ -183,7 +176,6 @@ public class Ghost extends Entity {
         }else{
             return Direction.getRandomDirection();
         }
-
         for(int i=0; i< possibleStep.size();i++){
             if(isScared()){
                 if(possibleStep.get(i).getProbability()>=max && !(grille.getElement(possibleStep.get(i).getX(),possibleStep.get(i).getY()) instanceof Wall)){
@@ -217,20 +209,31 @@ public class Ghost extends Entity {
                 else{
                     direction=Direction.getRandomDirection();
                 }
+                if( grille.getElement(x,y) instanceof Ground && ((Ground) grille.getElement(x,y)).getItem() instanceof GhostSpawn){
+                    if(grille.getElement(x-1,y) instanceof Ground){
+                        direction=Direction.NORTH;
+                    }
+                }
+                if(x==0){
+                    x=18;
+                }
+                else if(x==18){
+                    x=0;
+                }
                 if(direction==Direction.NORTH){
-                    if (grille.isValideMove(x, y-1)) {
+                    if (grille.isValideMove(x, y-1,this)) {
                         y--;
                     }
                 }else if(direction==Direction.EAST){
-                    if (grille.isValideMove(x+1, y)) {
+                    if (grille.isValideMove(x+1, y,this)) {
                         x++;
                     }
                 }else if(direction==Direction.SOUTH){
-                    if (grille.isValideMove(x, y+1)) {
+                    if (grille.isValideMove(x, y+1,this)) {
                         y++;
                     }
                 }else if(direction==Direction.WEST){
-                    if (grille.isValideMove(x-1, y)) {
+                    if (grille.isValideMove(x-1, y,this)) {
                         x--;
                     }
                 }

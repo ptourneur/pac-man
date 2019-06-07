@@ -67,9 +67,9 @@ public class Grid {
         if(internalTimer>=12){
             ghosts.get(3).setMoveable(true);
         }else if(internalTimer>=10){
-            ghosts.get(2).setMoveable(true);
-        }else if(internalTimer>=5){
             ghosts.get(1).setMoveable(true);
+        }else if(internalTimer>=5){
+            ghosts.get(2).setMoveable(true);
         }if(internalTimer>=3){
             ghosts.get(0).setMoveable(true);
         }
@@ -79,12 +79,6 @@ public class Grid {
         return this.grille[col][row];
     }
 
-    public boolean isValideMove(int newCol, int newRow) {
-        if(newCol < 0 || newRow < 0) return false;
-        if(newRow >= 21 || newCol >= 19) return false;
-
-            return !(this.grille[newCol][newRow] instanceof Wall);
-    }
 
     public boolean isValideMove(int newCol, int newRow, Entity e) {
 
@@ -95,7 +89,7 @@ public class Grid {
             if ( ((Ground) grille[newCol][newRow]).getItem() instanceof  GhostSpawn ){
                 int entityX=e.getX();
                 int entityY=e.getY();
-                if( this.grille[entityX][entityY] instanceof Ground && ((Ground) grille[entityX][entityY]).getItem() instanceof GhostSpawn && newCol < entityX){
+                if( this.grille[entityX][entityY] instanceof Ground && ((Ground) grille[entityX][entityY]).getItem() instanceof GhostSpawn){
                     return true;
                 }else{
                     return false;

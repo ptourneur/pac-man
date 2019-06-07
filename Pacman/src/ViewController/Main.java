@@ -172,17 +172,17 @@ public class Main extends Application {
             }
         }
 
-        CyclicBarrier graphicBarrier = new CyclicBarrier(1 );
+        //CyclicBarrier graphicBarrier = new CyclicBarrier(1 );
         Observer pacmanObserver =  new Observer() { // l'observer observe l'obervable (update est exécuté dès notifyObservers() est appelé côté modèle )
             @Override
             public synchronized void update(Observable o, Object arg) {
-                try {
-                    graphicBarrier.await();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (BrokenBarrierException e) {
-                    e.printStackTrace();
-                }
+                //try {
+                //    graphicBarrier.await();
+                //} catch (InterruptedException e) {
+                //    e.printStackTrace();
+                //} catch (BrokenBarrierException e) {
+                //    e.printStackTrace();
+                //}
                 for (int i = 0; i < columnCount; i++) { // rafraichissement graphique
                     for (int j = 0; j < rowCount; j++) {
                         if (pacMan.getX() == i && pacMan.getY() == j) { // pacMan est à la position i, j => le dessiner

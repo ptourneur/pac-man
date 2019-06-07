@@ -131,25 +131,25 @@ public class PacMan extends Entity {
             }
 
             if(direction==Direction.NORTH){
-                if (grille.isValideMove(x, y-1)) {
+                if (grille.isValideMove(x, y-1,this)) {
                     grille.setElement(x, y, new Ground());
                     y--;
                     eatPacgum();
                 }
             }else if(direction==Direction.EAST){
-                if (grille.isValideMove(x+1, y)) {
+                if (grille.isValideMove(x+1, y,this)) {
                     grille.setElement(x, y, new Ground());
                     x++;
                     eatPacgum();
                 }
             }else if(direction==Direction.SOUTH){
-                if (grille.isValideMove(x, y+1)) {
+                if (grille.isValideMove(x, y+1,this)) {
                     grille.setElement(x, y, new Ground());
                     y++;
                     eatPacgum();
                 }
             }else if(direction==Direction.WEST){
-                if (grille.isValideMove(x-1, y)) {
+                if (grille.isValideMove(x-1, y,this)) {
                     grille.setElement(x, y, new Ground());
                     x--;
                     eatPacgum();
