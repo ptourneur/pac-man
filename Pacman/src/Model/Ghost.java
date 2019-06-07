@@ -210,9 +210,11 @@ public class Ghost extends Entity {
                     direction=Direction.getRandomDirection();
                 }
                 if( grille.getElement(x,y) instanceof Ground && ((Ground) grille.getElement(x,y)).getItem() instanceof GhostSpawn){
-                    if(grille.getElement(x-1,y) instanceof Ground){
+                    if(grille.getElement(x,y-1) instanceof Ground){
                         direction=Direction.NORTH;
-                    }
+                    }/*else if(grille.getElement(x-1,y) instanceof Ground){
+                        direction=Direction.WEST;
+                    }*/
                 }
                 if(x==0){
                     x=18;

@@ -14,6 +14,7 @@ public class Grid {
     private boolean gameOver;
     private CyclicBarrier cyclicBarrier;
     private int internalTimer=0;
+    private int nbPacgum;
     private PacMan pacman;
     private ArrayList<Ghost> ghosts;
 
@@ -34,6 +35,7 @@ public class Grid {
         this.initMapSize();
         this.grille = new GridElement[columnCount][rowCount];
         this.ghosts = new ArrayList<>();
+        this.nbPacgum=0;
         this.cyclicBarrier = new CyclicBarrier(5 );
         this.initMap();
 
@@ -199,6 +201,7 @@ public class Grid {
                         break;
                     case "S":
                         this.setElement(column, row, new Ground(new PacGum()));
+                        nbPacgum++;
                         break;
                     case "B":
                         this.setElement(column, row, new Ground(new SuperPacGum()));
