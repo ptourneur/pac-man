@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.CyclicBarrier;
 
 public class Grid {
     private GridElement[][] grille;
@@ -11,6 +12,7 @@ public class Grid {
     private int columnCount;
     private int rowCount;
     private boolean gameOver;
+    private CyclicBarrier cyclicBarrier;
     private int internalTimer=0;
     private PacMan pacman;
     private ArrayList<Ghost> ghosts;
@@ -32,7 +34,9 @@ public class Grid {
         this.initMapSize();
         this.grille = new GridElement[columnCount][rowCount];
         this.ghosts = new ArrayList<>();
+        this.cyclicBarrier = new CyclicBarrier(5 );
         this.initMap();
+
     }
 
     public void setPacman(PacMan pacman){
@@ -60,13 +64,13 @@ public class Grid {
     public void incrementInternalTimer() {
         this.internalTimer++;
         //System.out.println(internalTimer);
-        if(internalTimer>=20){
+        if(internalTimer>=12){
             ghosts.get(3).setMoveable(true);
-        }else if(internalTimer>=15){
-            ghosts.get(2).setMoveable(true);
         }else if(internalTimer>=10){
+            ghosts.get(2).setMoveable(true);
+        }else if(internalTimer>=5){
             ghosts.get(1).setMoveable(true);
-        }if(internalTimer>=5){
+        }if(internalTimer>=3){
             ghosts.get(0).setMoveable(true);
         }
     }
@@ -101,27 +105,6 @@ public class Grid {
         return !(this.grille[newCol][newRow] instanceof Wall);
     }
 
-    public Position[] getNeighbors(int x, int y){
-        Position[] pos = null;
-        if((getElement(x,y) instanceof Wall)) return pos;
-        Position[] aux = new Position[4];
-        aux[0] = getNeighbor(x, y-1);
-        aux[1] = getNeighbor(x, y+1);
-        aux[2] = getNeighbor(x-1, y);
-        aux[3] = getNeighbor(x+1, y);
-        int count = 0;
-        for (int i = 0; i < aux.length; i++) {
-            if(aux[i]!=null) count++;
-        }
-        pos = new Position[count];
-        for (int i = 0; i < aux.length; i++) {
-            if(aux[i]!=null){
-                pos[count-1] = aux[i];
-                count--;
-            }
-        }
-        return pos;
-    }
 
     public Position getOneGhostSpawn(){
         for(int i=0;i<getRowCount();i++) {
@@ -139,7 +122,7 @@ public class Grid {
         return new Position(10,9);
     }
 
-    public boolean checkGameOver(){
+    public synchronized boolean checkGameOver(){
         for(int i=0;i<ghosts.size();i++){
             if(ghosts.get(i).getX()==getPacman().getX() && ghosts.get(i).getY()==getPacman().getY()){
                 if((ghosts.get(i).isScared()) ){
@@ -149,10 +132,11 @@ public class Grid {
                     ghosts.get(i).setScared(false);
                     pacman.setNbEatenGhost(pacman.getNbEatenGhost()+1);
                 }else{
+                    getPacman().reduceOneLife();
                     if(getPacman().getLives()>0){
-                        getPacman().reduceOneLife();
-                        getPacman().setX(9);
-                        getPacman().setY(1);
+                        System.out.println("Reducing one life: "+ghosts.get(i).getNumGhost());
+                        getPacman().setX(getPacman().getSpawnX());
+                        getPacman().setY(getPacman().getSpawnY());
                         return false;
                     }else{
                         setGameOver(true);
@@ -234,12 +218,14 @@ public class Grid {
                     case "G":
                         //GhostSpawn
                         this.setElement(column, row, new Ground(new GhostSpawn()));
-                        ghosts.add(new Ghost(column, row, numGhost, this));
+                        ghosts.add(new Ghost(column, row, numGhost, this, cyclicBarrier));
                         numGhost++;
                         break;
                     case "P":
                         this.setElement(column, row, new Ground());
-                        pacman = new PacMan(column, row, this);
+                        pacman = new PacMan(column, row, this, cyclicBarrier);
+                        pacman.setSpawnX(column);
+                        pacman.setSpawnY(row);
                     default:
                         this.setElement(column, row, new Wall());
                 }

@@ -18,8 +18,8 @@ public class Ghost extends Entity {
     private int isScared;
     private ArrayList<GhostStep> possibleStep;
 
-    public Ghost(int x, int y, int numGhost, Grid grille) {
-        super(x,y, grille);
+    public Ghost(int x, int y, int numGhost, Grid grille,CyclicBarrier cyclicBarrier) {
+        super(x,y, grille,cyclicBarrier);
         this.numGhost = numGhost;
         this.possibleStep=new ArrayList<>();
     }
@@ -205,19 +205,16 @@ public class Ghost extends Entity {
     }
     @Override
     public void run() {
-        Dijkstra dijkstra = new Dijkstra();
         while(true) { // spm descent dans la grille à chaque pas de temps
 
             //Le ghost 1 utilise une heuristique simple Manhattan
             if(moveable){
                 if(numGhost==1){
-                    // System.out.println("Dijkstra: "+dijkstra.getDistanceToTheClosestDot(x,y,grille));
                     direction = manhattanAlgorithm();
                 }else if(numGhost==2){
                     direction = parrallelAlgorithm();
                 }
                 else{
-                    //direction = manhattanAlgorithm();
                     direction=Direction.getRandomDirection();
                 }
                 if(direction==Direction.NORTH){

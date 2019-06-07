@@ -97,7 +97,10 @@ public class Main extends Application {
 
     public void checkIfDead(Ghost ghost,PacMan pacman,Stage primaryStage){
         if(ghost.getX() == pacman.getX() && ghost.getY() == pacman.getY()){
-            startGameOver(primaryStage);
+            grille.checkGameOver();
+            if(grille.isGameOver()){
+                startGameOver(primaryStage);
+            }
         }
     }
 
@@ -150,7 +153,7 @@ public class Main extends Application {
         columnCount = grille.getColumnCount();
         rowCount = grille.getRowCount();
 
-        CyclicBarrier cyclicBarrier = new CyclicBarrier(5 ,new AggregatorThread());
+
         ArrayList<Ghost> ghosts = grille.getGhosts();
         pacMan      = grille.getPacman();
         ghostRed    = ghosts.get(0);
@@ -158,8 +161,6 @@ public class Main extends Application {
         ghostPink   = ghosts.get(2);
         ghostOrange = ghosts.get(3);
 
-        pacMan.setCyclicBarrier(cyclicBarrier);
-        ghosts.forEach(ghost -> ghost.setCyclicBarrier(cyclicBarrier));
 
         ImageView[][] tab = new ImageView[columnCount][rowCount]; // tableau permettant de récupérer les cases graphiques lors du rafraichissement
 
@@ -171,11 +172,10 @@ public class Main extends Application {
             }
         }
 
-        CyclicBarrier graphicBarrier = new CyclicBarrier(1 ,new AggregatorThread());
+        CyclicBarrier graphicBarrier = new CyclicBarrier(1 );
         Observer pacmanObserver =  new Observer() { // l'observer observe l'obervable (update est exécuté dès notifyObservers() est appelé côté modèle )
             @Override
             public synchronized void update(Observable o, Object arg) {
-
                 try {
                     graphicBarrier.await();
                 } catch (InterruptedException e) {
@@ -183,43 +183,26 @@ public class Main extends Application {
                 } catch (BrokenBarrierException e) {
                     e.printStackTrace();
                 }
-                /*
-                for (int i = 0; i < columnCount; i++) { // rafraichissement graphique
-                    for (int j = 0; j < rowCount; j++) {
-                        if(grille.getElement(i,j) instanceof Ground){
-                            if (((Ground) grille.getElement(i,j)).getItem() instanceof  PacGum) {
-                                tab[i][j].setImage(imgSmallDot);
-                            } else if(((Ground) grille.getElement(i,j)).getItem() instanceof  SuperPacGum) {
-                                tab[i][j].setImage(imgWhiteDot);
-                            } else {
-                                tab[i][j].setImage(imgGround);
-                            }
-                        }
-                    }
-                }
-                */
-
                 for (int i = 0; i < columnCount; i++) { // rafraichissement graphique
                     for (int j = 0; j < rowCount; j++) {
                         if (pacMan.getX() == i && pacMan.getY() == j) { // pacMan est à la position i, j => le dessiner
                             tab[i][j].setImage(pacmanImages[(pacMan.getDirection()).ordinal()]);
+
+                            if(grille.isGameOver()){
+                                startGameOver(primaryStage);
+                            }
                         }
                         else if(ghostRed.getX() == i && ghostRed.getY() == j){
-                            System.out.println("GX: "+ghostRed.getX()+" GY: "+ghostRed.getY()+"  -  PX: "+pacMan.getX()+ "PY: "+pacMan.getY());
                             tab[i][j].setImage(ghostRed.isScared() ? (ghostRed.isSoonNotScared() ? imgWhiteGhost : imgBlueGhost) : redGhostImages[(ghostRed.getDirection()).ordinal()]);
-                            checkIfDead(ghostRed,pacMan,primaryStage);
                         }
                         else if(ghostCyan.getX() == i && ghostCyan.getY() == j){
                             tab[i][j].setImage(ghostCyan.isScared() ? (ghostCyan.isSoonNotScared() ? imgWhiteGhost : imgBlueGhost) : cyanGhostImages[(ghostCyan.getDirection()).ordinal()]);
-                            checkIfDead(ghostCyan,pacMan,primaryStage);
                         }
                         else if(ghostPink.getX() == i && ghostPink.getY() == j){
                             tab[i][j].setImage(ghostPink.isScared() ? (ghostPink.isSoonNotScared() ? imgWhiteGhost : imgBlueGhost) : pinkGhostImages[(ghostPink.getDirection()).ordinal()]);
-                            checkIfDead(ghostPink,pacMan,primaryStage);
                         }
                         else if(ghostOrange.getX() == i && ghostOrange.getY() == j){
                             tab[i][j].setImage(ghostOrange.isScared() ? (ghostOrange.isSoonNotScared() ? imgWhiteGhost : imgBlueGhost) : orangeGhostImages[(ghostOrange.getDirection()).ordinal()]);
-                            checkIfDead(ghostOrange,pacMan,primaryStage);
                         }
                         else {
                             if (grille.getElement(i,j) instanceof Wall) {
@@ -239,52 +222,14 @@ public class Main extends Application {
                         }
                     }
                 }
-                //grille.checkGameOver();
-                if(grille.isGameOver()){
-                    startGameOver(primaryStage);
-                }
             }
         };
-/*
-        Observer ghostObserver =  new Observer() { // l'observer observe l'obervable (update est exécuté dès notifyObservers() est appelé côté modèle )
-            @Override
-            public void update(Observable o, Object arg) {
-                for (int i = 0; i < columnCount; i++) { // rafraichissement graphique
-                    for (int j = 0; j < rowCount; j++) {
-                        if(ghostRed.getX() == i && ghostRed.getY() == j){
-                            tab[i][j].setImage(ghostRed.getScared() ? imgBlueGhost : redGhostImages[(ghostRed.getDirection()).ordinal()]);
-                        }
-                        else if(ghostCyan.getX() == i && ghostCyan.getY() == j){
-                            tab[i][j].setImage(ghostCyan.getScared() ? imgBlueGhost : cyanGhostImages[(ghostCyan.getDirection()).ordinal()]);
-                        }
-                        else if(ghostPink.getX() == i && ghostPink.getY() == j){
-                            tab[i][j].setImage(ghostPink.getScared() ? imgBlueGhost : pinkGhostImages[(ghostPink.getDirection()).ordinal()]);
-                        }
-                        else if(ghostOrange.getX() == i && ghostOrange.getY() == j){
-                            tab[i][j].setImage(ghostOrange.getScared() ? imgBlueGhost : orangeGhostImages[(ghostOrange.getDirection()).ordinal()]);
-                        }
-                    }
-                }
-
-                //grille.checkGameOver();
-                if(grille.isGameOver()){
-                    startGameOver(primaryStage);
-                }
-            }
-        };
-
-*/
 
 
         ghostRed.start();
-        //ghostRed.addObserver(ghostObserver);
         ghostCyan.start();
-        //ghostCyan.addObserver(ghostObserver);
         ghostPink.start();
-        //ghostPink.addObserver(ghostObserver);
         ghostOrange.start();
-        //ghostOrange.addObserver(ghostObserver);
-
         pacMan.start(); // on démarre pacMan
         pacMan.addObserver(pacmanObserver);
 
@@ -346,11 +291,8 @@ public class Main extends Application {
         timeline.play();
 
         grid.add(timerLabel,1,1);
-
         root.getChildren().add(grid);
-
         root.getChildren().add(flashScreen_node);
-
         StackPane stackpane = new StackPane();
 
         stackpane.setAlignment(timerLabel, Pos.TOP_RIGHT);
@@ -435,7 +377,7 @@ public class Main extends Application {
 
 
 
-        startGame(primaryStage);
+        //startGame(primaryStage);
 
 
 

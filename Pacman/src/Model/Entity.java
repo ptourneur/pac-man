@@ -41,11 +41,12 @@ public abstract class Entity extends Observable implements Runnable,GridElement 
     }
 
 
-    public Entity(int x, int y, Grid grille) {
+    public Entity(int x, int y, Grid grille,CyclicBarrier cyclicBarrier) {
         this.x = x;
         this.y = y;
         this.grille = grille;
-        direction=Direction.EAST;
+        this.cyclicBarrier = cyclicBarrier;
+        direction=Direction.NORTH;
     }
 
     public synchronized int getX() {

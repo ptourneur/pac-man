@@ -11,14 +11,40 @@ import java.util.logging.Logger;
 
 
 public class PacMan extends Entity {
-    private int nbEatenApple=0;
-    private int nbEatenPacgum=0;
-    private int lives=3;
-    private int nbEatenGhost=0;
-    private int nbEatenSuperPacgum=0;
+    private int nbEatenApple;
+    private int nbEatenPacgum;
+    private int lives;
 
-    public PacMan(int x, int y, Grid grille) {
-        super(x,y,grille);
+    public int getSpawnX() {
+        return spawnX;
+    }
+
+    public void setSpawnX(int spawnX) {
+        this.spawnX = spawnX;
+    }
+
+    public int getSpawnY() {
+        return spawnY;
+    }
+
+    public void setSpawnY(int spawnY) {
+        this.spawnY = spawnY;
+    }
+
+    private int nbEatenGhost;
+    private int nbEatenSuperPacgum;
+    private int spawnX;
+    private int spawnY;
+
+    public PacMan(int x, int y, Grid grille,CyclicBarrier cyclicBarrier) {
+        super(x,y,grille,cyclicBarrier);
+        nbEatenApple=0;
+        nbEatenPacgum=0;
+        lives=3;
+        nbEatenGhost=0;
+        nbEatenSuperPacgum=0;
+        spawnX=0;
+        spawnY=0;
     }
 
     public int getNbEatenPacgum() {
@@ -95,7 +121,8 @@ public class PacMan extends Entity {
     }
 
     public void run() {
-        while(true) {
+        while(lives>0) {
+            System.out.println("Lives: "+lives);
             if(x==0){
                 x=18;
             }
@@ -143,6 +170,7 @@ public class PacMan extends Entity {
             } catch (BrokenBarrierException e) {
                 e.printStackTrace();
             }
+
         }
     }
 }

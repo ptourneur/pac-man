@@ -1,5 +1,6 @@
 package Model;
 
+
 public class Layout implements GridElement {
 
     private boolean isWalkable;
