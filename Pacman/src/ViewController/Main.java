@@ -26,9 +26,11 @@ import javafx.scene.control.Button;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.BrokenBarrierException;
@@ -73,7 +75,6 @@ public class Main extends Application {
 
                 root.getChildren().addAll(flashScreen_node); //add the title screen to the root
 
-
                 Label scoreEndgame = new Label();
                 scoreEndgame.setText("Votre score: "+(grille.getPacman().getScore()+ "   "));
                 scoreEndgame.setTextFill(Color.YELLOW);
@@ -84,6 +85,15 @@ public class Main extends Application {
                 stackpane.setAlignment(scoreEndgame, Pos.BOTTOM_CENTER);
 
                 root.getChildren().add(scoreEndgame);
+
+                try{
+                    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                    Date date = new Date();
+                    FileWriter fw=new FileWriter("./score.txt",true);
+                    fw.write(dateFormat.format(date) + " - " + pacMan.getScore() + "\n");
+                    fw.write(System.getProperty( "line.separator" ));
+                    fw.close();
+                }catch(Exception e){System.out.println(e);}
 
                 primaryStage.setScene(scene);
                 primaryStage.getIcons().add(gameOverScreen); //stage icon
