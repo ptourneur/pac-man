@@ -211,9 +211,9 @@ public class Ghost extends Entity {
                     }
                 }
                 if(x==0){
-                    x=18;
+                    x=grille.getColumnCount()-1;
                 }
-                else if(x==18){
+                else if(x==grille.getColumnCount()-1){
                     x=0;
                 }
                 if(direction==Direction.NORTH){

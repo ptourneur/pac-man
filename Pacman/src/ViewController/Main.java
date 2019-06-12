@@ -105,14 +105,6 @@ public class Main extends Application {
 
     }
 
-    public void checkIfDead(Ghost ghost,PacMan pacman,Stage primaryStage){
-        if(ghost.getX() == pacman.getX() && ghost.getY() == pacman.getY()){
-            if(grille.isGameOver()){
-                startGameOver(primaryStage);
-            }
-        }
-    }
-
     public void startGame(Stage primaryStage){
         Media sound = new Media(new File("src/ressources/pacman_beginning.wav").toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(sound);

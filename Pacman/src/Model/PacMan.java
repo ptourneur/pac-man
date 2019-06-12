@@ -123,9 +123,9 @@ public class PacMan extends Entity {
     public void run() {
         while(lives>0) {
             if(x==0){
-                x=18;
+                x=grille.getColumnCount()-1;
             }
-            else if(x==18){
+            else if(x==grille.getColumnCount()-1){
                 x=0;
             }
 
